@@ -149,8 +149,6 @@ void game(){
     plantaBomba();
     preencheCampo();
 
-    printf("\n\n\n\n\n");
-
     while(lose){
         do{
             printf("\n\nlin  ");
