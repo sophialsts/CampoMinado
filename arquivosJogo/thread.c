@@ -19,7 +19,6 @@ int revelados[tamCampo][tamCampo] = {naoRevelado,naoRevelado,naoRevelado,naoReve
                                     naoRevelado,naoRevelado,naoRevelado,naoRevelado,naoRevelado,
                                     naoRevelado,naoRevelado,naoRevelado,naoRevelado,naoRevelado};
 
-int segundos;
 int lose = 1;
 
 void clean(){
@@ -32,11 +31,14 @@ void clean(){
 
 void *timer(void* arg){
 
+    int segundos;
+
     while(lose){ 
-        printf("Your time: %d\r",segundos);
+        printf("\rYour time: %d segundos\n",segundos);
         fflush(stdout);
         sleep(1);
         segundos++;
+        printf("\033[A\033[2K");
     };
 
     return NULL;
@@ -151,6 +153,7 @@ void game(){
 
     while(lose){
         do{
+            printf("\n");
             printf("\n\nlin  ");
             scanf("%d", &linha);
             printf("col  ");
@@ -158,11 +161,10 @@ void game(){
             if(!verificaCoordenadas(linha,coluna)) {
                 printf("Digite coordenadas válidas\n");
                 sleep(1);
+                clean();
                 }
         }
         while(!verificaCoordenadas(linha,coluna) && revelados[linha][coluna] != naoRevelado);
-
-        clean();
 
         switch(M[linha][coluna]){
             case Bomba:
@@ -178,6 +180,7 @@ void game(){
                 revelados[linha][coluna] = M[linha][coluna];
         }
 
+        printf("\n\n\n");
         printf("\n   |");
         for (int i = 0; i < tamCampo; i++) printf(" %d |",i);
         printf("\n-------------------------");
@@ -206,6 +209,8 @@ void game(){
 
     }
     printf("\n\n");
+
+    clean();
 
 }
 
