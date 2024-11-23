@@ -38,6 +38,24 @@ void clean(){
     };
 */
 
+void menu(){
+
+    char start;
+
+    printf("");
+    printf("                                   B E M     V I N D O      A O     C A M P O     M I N A D O\n\n");
+    printf("                                                                   _`´ \n");
+    printf("                                                                  /\n");
+    printf("                                                             ******\n");
+    printf("                                                           *********\n");
+    printf("                                                          ***********\n");
+    printf("                                                           *********\n");
+    printf("                                                            *******\n\n");
+    printf("                                                   Clique enter para começar");
+    scanf("%c", &start);
+    if(start == '\n') return;
+}
+
 int verificaCoordenadas(int linha, int coluna) {
     if (linha < 0 || linha >= tamCampo || coluna < 0 || coluna >= tamCampo) return 0; 
     return 1; 
@@ -137,63 +155,23 @@ void revela(int linha, int coluna){
     
 }
 
-int main(){
+void prtMatriz(){
 
-    //timer();
-    int linha, coluna;
-    int lose = 1;
-
-    plantaBomba();
-    preencheCampo();
-
-
-    while(lose){
-        do{
-            printf("\nlin  ");
-            scanf("%d", &linha);
-            printf("col  ");
-            scanf("%d", &coluna);
-            if(!verificaCoordenadas(linha,coluna)) {
-                printf("Digite coordenadas válidas\n");
-                sleep(1);
-                }
-            else if(revelados[linha][coluna] != naoRevelado){
-                printf("Essa célula já foi selecionada.\n");
-            }
-        }
-        while(!verificaCoordenadas(linha,coluna) || revelados[linha][coluna] != naoRevelado);
-
-        switch(M[linha][coluna]){
-            case Bomba:
-                printf("Você selecionou um local com bomba.\nVocê perdeu");
-                sleep(2);
-                lose = 0;
-                clean();
-                break; //colocar uma variável pra indicar q perdeu
-            case Vazio:
-                revela(linha,coluna);
-                break;
-            default:
-                revelados[linha][coluna] = M[linha][coluna];
-        }
-
-        clean();
-
-        printf("\n   |");
+    printf("\n                                                    |");
         for (int i = 0; i < tamCampo; i++) printf(" %d |",i);
-        printf("\n-------------------------");
+        printf("\n                                                 -------------------------");
         for (int i = 0; i < tamCampo; i++) {
             printf("    \n");
-            printf(" %d |",i);
+            printf("                                                  %d |",i);
             for (int j = 0; j < tamCampo; j++) {
                 if(j == tamCampo -1){
                     if(revelados[i][j] != naoRevelado){
                         printf(" %d |\n", revelados[i][j]);
-                        printf("------------------------");
+                        printf("                                                 ------------------------");
                     }
                     else {
                         printf("   |\n");
-                        printf("------------------------");
+                        printf("                                                 ------------------------");
                     }
                 }
                 else if (revelados[i][j] == naoRevelado){
@@ -205,8 +183,97 @@ int main(){
             }
         }
 
+}
+
+int win(){
+
+int cont = 0;
+
+for (int i = 0; i < tamCampo; i++) {
+    for (int j = 0; j < tamCampo; j++) {
+        if(revelados[i][j] != naoRevelado) cont++; 
+    }
+}
+
+if(cont == ((tamCampo*tamCampo) - 3)) return 1;
+else return 0;
+
+}
+
+void game(){
+
+    int linha, coluna;
+    int lose = 1;
+
+    plantaBomba();
+    preencheCampo();
+    clean();
+
+    while(lose == 1){
+
+        prtMatriz();
+
+        do{
+            printf("\n\n                                                Digite a linha que deseja:");
+            scanf("%d", &linha);
+            printf("                                                Digite a coluna que deseja:");
+            scanf("%d", &coluna);
+            if(!verificaCoordenadas(linha,coluna)) {
+                printf("                                                Digite coordenadas válidas\n");
+                sleep(1);
+                }
+            else if(revelados[linha][coluna] != naoRevelado){
+                printf("                                                Essa célula já foi selecionada.\n");
+            }
+        }
+        while(!verificaCoordenadas(linha,coluna) || revelados[linha][coluna] != naoRevelado);
+
+        switch(M[linha][coluna]){
+            case Bomba:
+                printf("                                                Você selecionou um local com bomba :c\n");
+                sleep(3);
+                clean();
+                printf("\n\n\n\n\n\n\n\n");
+                printf("                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+                printf("                                  |    D     E     F     E     A     T     |\n");
+                printf("                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+                sleep(2);
+                lose = 0;
+                clean();
+                break; 
+            case Vazio:
+                revela(linha,coluna);
+                break;
+            default:
+                revelados[linha][coluna] = M[linha][coluna];
+        }
+
+        if(win()) {
+            clean();
+            printf("\n\n\n\n\n\n\n\n");
+            printf("                                                  P A R A B É N S !\n");
+            printf("                                     V O C Ê     E N C E R R O U     O     J O G O!\n");
+            sleep(3);
+            clean();
+            printf("\n\n\n\n\n\n\n\n");
+            printf("                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+            printf("                                      |    V    I    C    T    O    R    Y     |\n");
+            printf("                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+            sleep(3); 
+            return;
+        }
+        clean();
+
     }
     printf("\n\n");
+
+}
+
+int main(){
+
+    //timer();
+    menu();
+    game();
 
     return 0;
 
