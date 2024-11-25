@@ -63,15 +63,16 @@ void menu(){
     char start;
 
     printf("\n");
-    printf("                                   B E M     V I N D O      A O     C A M P O     M I N A D O\n\n");
-    printf("                                                                   _`´ \n");
+    printf("                                   B E M     V I N D O      A O     C A M P O     M I N A D O\n");
+    printf("                                   ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\n");
+    printf("                                                                   _❈ \n");
     printf("                                                                  /\n");
-    printf("                                                             ******\n");
-    printf("                                                           *********\n");
-    printf("                                                          ***********\n");
-    printf("                                                           *********\n");
-    printf("                                                            *******\n\n");
-    printf("                                                   Clique enter para começar");
+    printf("                                                             ✩✩✩✩✩✩\n");
+    printf("                                                           ✩✩✩✩✩✩✩✩✩\n");
+    printf("                                                          ✩✩✩✩✩✩✩✩✩✩✩\n");
+    printf("                                                           ✩✩✩✩✩✩✩✩✩\n");
+    printf("                                                            ✩✩✩✩✩✩✩\n\n");
+    printf("                                                   Clique enter para começar!");
     
     scanf("%c", &start);
     if(start == '\n') return;
@@ -179,31 +180,32 @@ void prtMatriz(){
 
     printf("\n                                                    |");
         for (int i = 0; i < tamCampo; i++) printf(" %d |",i);
-        printf("\n                                                 -------------------------");
+        printf("\n                                                 ————————————————————————");
         for (int i = 0; i < tamCampo; i++) {
             printf("    \n");
             printf("                                                  %d |",i);
             for (int j = 0; j < tamCampo; j++) {
                 if(j == tamCampo -1){
                     if(revelados[i][j] != naoRevelado){
-                        printf(" %d |\n", revelados[i][j]);
-                        printf("                                                 ------------------------");
+                        if(revelados[i][j] == Vazio) printf("   |\n");
+                        else printf(" %d |\n", revelados[i][j]);
+                        printf("                                                 —————————————————————————");
                     }
                     else {
-                        printf("   |\n");
-                        printf("                                                 ------------------------");
+                        printf("▆▆▆|\n");
+                        printf("                                                 ————————————————————————");
                     }
                 }
                 else if (revelados[i][j] == naoRevelado){
-                    printf("   |"); 
+                    printf("▆▆▆|"); 
                     }
                 else {
-                    printf(" %d |", revelados[i][j]);
+                    if(revelados[i][j] == Vazio) printf("   |");
+                    else printf(" %d |", revelados[i][j]);
                 }
             }
         }
-
-}
+    }
 
 int win(){
 
@@ -254,10 +256,12 @@ void game(){
                 sleep(3);
                 clean();
                 printf("\n\n\n\n\n\n\n\n");
-                printf("                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-                printf("                                  |    D     E     F     E     A     T     |\n");
-                printf("                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-                sleep(2);
+                printf("                                   ⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤\n");
+                printf("                                  ⎰                                  ⎱\n");
+                printf("                                  ⟪  D    E     F     E     A     T  ⟫\n");
+                printf("                                  ⎱                                  ⎰\n");
+                printf("                                   ⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤\n");
+                sleep(3);
                 lose = 0;
                 clean();
                 break; 
@@ -276,9 +280,11 @@ void game(){
             sleep(3);
             clean();
             printf("\n\n\n\n\n\n\n\n");
-            printf("                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-            printf("                                      |    V    I    C    T    O    R    Y     |\n");
-            printf("                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+            printf("                                   ⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤\n");
+            printf("                                  ⎰                                  ⎱\n");
+            printf("                                  ⟪  V   I    C    T    O    R    Y  ⟫\n");
+            printf("                                  ⎱                                  ⎰\n");
+            printf("                                   ⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤\n");
             sleep(3); 
             return;
         }
