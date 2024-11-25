@@ -9,12 +9,32 @@
 
 enum casas {Vazio = 0, umaProx = 1, duasProx = 2, tresProx = 3, quatroProx = 4, naoRevelado = 5, Bomba = 6};
 
-int M[tamCampo][tamCampo];
+int (*M)[tamCampo] = NULL; //(*M) ponteiro para array
+
 int revelados[tamCampo][tamCampo] = {naoRevelado,naoRevelado,naoRevelado,naoRevelado,naoRevelado,
                                     naoRevelado,naoRevelado,naoRevelado,naoRevelado,naoRevelado,
                                     naoRevelado,naoRevelado,naoRevelado,naoRevelado,naoRevelado,
                                     naoRevelado,naoRevelado,naoRevelado,naoRevelado,naoRevelado,
                                     naoRevelado,naoRevelado,naoRevelado,naoRevelado,naoRevelado};
+
+void alocaMemória() {
+    M = malloc(tamCampo * sizeof(*M));
+
+    if (M == NULL) {
+        printf("Erro ao alocar memória!\n");
+        exit(1);
+    }
+
+    return;
+}
+
+
+void liberaMemoria() {
+    if (M != NULL) {
+        free(M);
+    }
+}
+
 
 void clean(){
     #ifdef _WIN32
@@ -42,7 +62,7 @@ void menu(){
 
     char start;
 
-    printf("");
+    printf("\n");
     printf("                                   B E M     V I N D O      A O     C A M P O     M I N A D O\n\n");
     printf("                                                                   _`´ \n");
     printf("                                                                  /\n");
@@ -52,8 +72,10 @@ void menu(){
     printf("                                                           *********\n");
     printf("                                                            *******\n\n");
     printf("                                                   Clique enter para começar");
+    
     scanf("%c", &start);
     if(start == '\n') return;
+    
 }
 
 int verificaCoordenadas(int linha, int coluna) {
@@ -69,8 +91,8 @@ void verificaVizinhos(int linha, int coluna){
 
     for (i = linha - 1; i <= linha + 1; i++) {
         for (j = coluna - 1; j <= coluna + 1; j++) {
-            if(i == linha && j == coluna) continue;
             if(M[i][j] == Bomba && verificaCoordenadas(i,j) == 1) quantBomb++;
+            if(i == linha && j == coluna) continue;
         }
     }
 
@@ -105,7 +127,7 @@ void preencheCampo(){
 
      for (int i = 0; i < tamCampo; i++) {
         for (int j = 0; j < tamCampo; j++) {
-            if(M[i][j] != Bomba) verificaVizinhos(i,j);
+            if (verificaCoordenadas(i, j) && M[i][j] != Bomba) verificaVizinhos(i, j);
         }
      }
 
@@ -135,8 +157,6 @@ void plantaBomba(){
 }
 
 void revela(int linha, int coluna){
-
-    if (!verificaCoordenadas(linha, coluna)) return; //desnecessário já que ocorre essa verificação antes de chamar essa função
 
     if (M[linha][coluna] == Vazio) {
         revelados[linha][coluna] = Vazio;
@@ -272,8 +292,10 @@ void game(){
 int main(){
 
     //timer();
+    alocaMemória();
     menu();
     game();
+    liberaMemoria();
 
     return 0;
 
