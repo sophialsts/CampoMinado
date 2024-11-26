@@ -1,21 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <time.h>
-#define tamCampo 5
+#define tamCampo 8
 
 // ponteiro para armazenar quantidade de casas que o jogador conseguiu revelar
 // struct para toda parte de arquivo, alocar memória pra ele e liberar depois de fechar o arquivo
 
 enum casas {Vazio = 0, umaProx = 1, duasProx = 2, tresProx = 3, quatroProx = 4, naoRevelado = 5, Bomba = 6};
-
+int lose = 1;
 int (*M)[tamCampo] = NULL; //(*M) ponteiro para array
+int revelados[tamCampo][tamCampo];
 
-int revelados[tamCampo][tamCampo] = {naoRevelado,naoRevelado,naoRevelado,naoRevelado,naoRevelado,
-                                    naoRevelado,naoRevelado,naoRevelado,naoRevelado,naoRevelado,
-                                    naoRevelado,naoRevelado,naoRevelado,naoRevelado,naoRevelado,
-                                    naoRevelado,naoRevelado,naoRevelado,naoRevelado,naoRevelado,
-                                    naoRevelado,naoRevelado,naoRevelado,naoRevelado,naoRevelado};
+typedef struct{
+        char nome[40];
+        int dificuldade;
+        int pontuação;
+        int tempo;
+    } Infos;
 
 void alocaMemória() {
     M = malloc(tamCampo * sizeof(*M));
@@ -44,19 +47,18 @@ void clean(){
     #endif
 }
 
-/*void timer(parametro encontrou bomba ou ganhou)
+int timer(){
 
     int segundos = 0;
 
-    while(parametro encontrou bomba ou ganhou verdadeiro segundos < 20){ // segundos < 20 só de teste
-        printf("Your time: %d\r",segundos);
-        fflush(stdout);
-
+    while(lose){ 
         sleep(1);
-
         segundos++;
     };
-*/
+
+    return segundos;
+}
+
 
 void menu(){
 
@@ -142,7 +144,7 @@ void plantaBomba(){
 
     srand(time(NULL));
 
-    while(quantBombT < 3){
+    while(quantBombT < tamCampo-2){
 
         do{
             linBomb = ((rand() % tamCampo)); //antes tava mod 5 + 1, o que poderia gerar índice fora da matriz
@@ -225,7 +227,6 @@ else return 0;
 void game(){
 
     int linha, coluna;
-    int lose = 1;
 
     plantaBomba();
     preencheCampo();
@@ -288,20 +289,66 @@ void game(){
             sleep(3); 
             return;
         }
-        clean();
+            clean();
 
     }
     printf("\n\n");
 
 }
 
+void player(Infos *user, int time){
+
+    char nome[20];
+    char sobrenome[20];
+    char name[50];
+    int nível;
+
+    printf("Digite seu 1º nome:\n");
+    scanf("%s",&nome);
+    printf("Digite seu sobrenome:\n");
+    scanf("%s",&sobrenome);
+
+    strcpy(name,nome);
+    strcat(name," ");
+    strcpy(name,sobrenome);
+
+    do {
+    printf("Selecione um nível de jogo: / 1 / 2 / 3 /\n");
+    scanf("%d", &nível);
+    } while (nível > 3 || nível < 1);
+
+    strcpy(user->nome, name);
+    user->dificuldade = nível;
+    user->tempo = time;
+    
+}
+
 int main(){
 
+    /*for(int i = 0; i < tamCampo ; i++){
+        for(int j = 0; j < tamCampo ; j++){
+            revelados[i][j] = naoRevelado;
+        }
+    } */
+
+    Infos *user;
+    user = (Infos *)malloc(sizeof(Infos));
+    
+    int tempo = timer();
+
+    player(user,tempo); 
+
+    printf("Nome: %s\n", user->nome);
+    printf("Dificuldade: %d\n", user->dificuldade);
+    printf("Tempo: %d\n", user->tempo);
+
+    free(user);
+
     //timer();
-    alocaMemória();
-    menu();
-    game();
-    liberaMemoria();
+    //alocaMemória();
+    //menu();
+    //game();
+    //liberaMemoria();
 
     return 0;
 
