@@ -13,12 +13,11 @@ int lose = 1;
 int (*M)[tamCampo] = NULL; //(*M) ponteiro para array
 int revelados[tamCampo][tamCampo];
 
-/*typedef struct{
+typedef struct{
         char nome[40];
         int dificuldade;
         int pontuação;
-        int tempo;
-    } Infos;*/
+    } Infos;
 
 void alocaMemória() {
     M = malloc(tamCampo * sizeof(*M));
@@ -297,59 +296,53 @@ void game(){
 
 }
 
-/*void player(Infos *user, int time){
+void player(Infos *user){
 
     char nome[20];
     char sobrenome[20];
-    char name[50];
+    char nomeCompleto[50];
     int nível;
 
     printf("Digite seu 1º nome:\n");
-    scanf("%s",&nome);
+    gets(nome);
     printf("Digite seu sobrenome:\n");
-    scanf("%s",&sobrenome);
+    gets(sobrenome);
 
-    strcpy(name,nome);
-    strcat(name," ");
-    strcpy(name,sobrenome);
+    snprintf(nomeCompleto, sizeof(nomeCompleto), "%s %s", nome, sobrenome);
 
     do {
     printf("Selecione um nível de jogo: / 1 / 2 / 3 /\n");
     scanf("%d", &nível);
     } while (nível > 3 || nível < 1);
 
-    strcpy(user->nome, name);
+    strcpy(user->nome, nomeCompleto);
     user->dificuldade = nível;
-    user->tempo = time;
     
-} */
+} 
 
 int main(){
 
-    for(int i = 0; i < tamCampo ; i++){
+    /*for(int i = 0; i < tamCampo ; i++){
         for(int j = 0; j < tamCampo ; j++){
             revelados[i][j] = naoRevelado;
         }
-    } 
+    } */
 
-    /*Infos *user;
+    Infos *user;
     user = (Infos *)malloc(sizeof(Infos));
-    
-    int tempo = timer();
 
-    player(user,tempo); 
+    player(user); 
 
     printf("Nome: %s\n", user->nome);
     printf("Dificuldade: %d\n", user->dificuldade);
-    printf("Tempo: %d\n", user->tempo);
 
-    free(user);*/
+    free(user);
 
     //timer();
-    alocaMemória();
-    menu();
-    game();
-    liberaMemoria();
+    //alocaMemória();
+    //menu();
+    //game();
+    //liberaMemoria();
 
     return 0;
 
