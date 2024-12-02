@@ -10,8 +10,8 @@
 int M[tamCampo][tamCampo];
 
 // Dimensões da janela
-static const int screenWidth = 800;
-static const int screenHeight = 450;
+static const int screenWidth = 1000;
+static const int screenHeight = 1000;
 
 void preencheCampo(){
 
@@ -33,7 +33,7 @@ void DrawWelcomeScreen(Vector2 bombPosition) {
         ClearBackground(PURPLE);
 
         // Mensagem de boas-vindas
-        DrawText("B E M     V I N D O      A O     C A M P O     M I N A D O!", 100, 100, 20, BLACK);
+        DrawText("B E M     V I N D O      A O     C A M P O     M I N A D O!", screenWidth/4, screenHeight/10, 20, BLACK);
 
         // Desenho da bomba
         DrawCircleV(bombPosition, 50, BLACK);                            // Corpo da bomba
@@ -47,7 +47,7 @@ void DrawWelcomeScreen(Vector2 bombPosition) {
         DrawCircle(bombPosition.x + 32, bombPosition.y - 76, 1, YELLOW);         // Faísca
 
         // Instrução para começar
-        DrawText("Pressione ENTER para começar", 250, 300, 20, BLACK);
+        DrawText("Pressione ENTER para começar", screenWidth/2.85, screenHeight - 2.75 * (screenHeight/4), 20, BLACK);
 
     EndDrawing();
 }
