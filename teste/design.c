@@ -4,9 +4,28 @@
 #include <time.h>
 #include <stdlib.h>
 
+#define tamCampo 5
+#define tamCelula 40
+
+int M[tamCampo][tamCampo];
+
 // Dimensões da janela
 static const int screenWidth = 800;
 static const int screenHeight = 450;
+
+void preencheCampo(){
+
+    int i;
+    int j;
+
+     for (int i = 0; i < tamCampo; i++) {
+        for (int j = 0; j < tamCampo; j++) {
+            //if (verificaCoordenadas(i, j) && M[i][j] != Bomba) verificaVizinhos(i, j);
+            M[i][j] = 2;
+        }
+     }
+
+}
 
 // Função para desenhar a tela inicial (incluindo a bomba)
 void DrawWelcomeScreen(Vector2 bombPosition) {
@@ -37,6 +56,8 @@ void DrawWelcomeScreen(Vector2 bombPosition) {
 void DrawGameScreen() {
 
     float startTime = GetTime();
+    int deslocamento_x = (screenWidth - (tamCampo * tamCelula)) / 2;
+    int deslocamento_y = (screenHeight - (tamCampo * tamCelula)) / 2;
 
     while (!WindowShouldClose()) {
         // Calcula o tempo decorrido
@@ -53,8 +74,24 @@ void DrawGameScreen() {
             // Exibe o tempo no topo da tela
             DrawText(timeText, 10, 10, 20, DARKGRAY);
 
-            // Simulação de outras partes do jogo
-            DrawText("Aqui vai o tabuleiro do Campo Minado!", 200, 200, 20, BLACK);
+        // Percorre a matriz para desenhar os quadrados
+        for (int i = 0; i < tamCampo; i++) {
+            for (int j = 0; j < tamCampo; j++) {
+                // Calcula posição na tela
+                int x = deslocamento_x + j * tamCelula;
+                int y = deslocamento_y + i * tamCelula;
+
+                // Determina a cor com base no valor da matriz
+                Color cor = (M[i][j] == 1) ? BLACK : WHITE;
+
+                // Desenha o quadrado
+                DrawRectangle(x, y, tamCelula, tamCelula, cor);
+
+                // Desenha bordas para separação (opcional)
+                DrawRectangleLines(x, y, tamCelula, tamCelula, GRAY);
+            }
+        }
+
         EndDrawing();
     }
 }

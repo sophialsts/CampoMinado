@@ -10,8 +10,9 @@
 
 enum casas {Vazio = 0, umaProx = 1, duasProx = 2, tresProx = 3, quatroProx = 4, naoRevelado = 5, Bomba = 6};
 int lose = 1;
-int (*M)[tamCampo] = NULL; //(*M) ponteiro para array
+//int (*M)[tamCampo] = NULL; //(*M) ponteiro para array
 int revelados[tamCampo][tamCampo];
+int M[tamCampo][tamCampo];
 
 typedef struct{
         char nome[40];
@@ -19,6 +20,7 @@ typedef struct{
         int pontuação;
     } Infos;
 
+/*
 void alocaMemória() {
     M = malloc(tamCampo * sizeof(*M));
 
@@ -28,14 +30,14 @@ void alocaMemória() {
     }
 
     return;
-}
+}*/
 
-
+/*
 void liberaMemoria() {
     if (M != NULL) {
         free(M);
     }
-}
+}*/
 
 
 void clean(){
