@@ -131,6 +131,7 @@ void preencheCampo(){
 
      for (int i = 0; i < tamCampo; i++) {
         for (int j = 0; j < tamCampo; j++) {
+            revelados[i][j] = naoRevelado;
             if (verificaCoordenadas(i, j) && M[i][j] != Bomba) verificaVizinhos(i, j);
         }
      }
@@ -300,6 +301,8 @@ void game(){
 
 void player(Infos *user){
 
+    //le direto
+
     char nome[20];
     char sobrenome[20];
     char nomeCompleto[50];
@@ -309,6 +312,8 @@ void player(Infos *user){
     gets(nome);
     printf("Digite seu sobrenome:\n");
     gets(sobrenome);
+
+    clean();
 
     snprintf(nomeCompleto, sizeof(nomeCompleto), "%s %s", nome, sobrenome);
 
@@ -322,7 +327,13 @@ void player(Infos *user){
     
 } 
 
+void points(){
+
+}
+
 int main(){
+
+    //colocar jogadas
 
     /*for(int i = 0; i < tamCampo ; i++){
         for(int j = 0; j < tamCampo ; j++){
@@ -330,21 +341,41 @@ int main(){
         }
     } */
 
+    /*
+    int pontuação = 0;
+    float ranking;
+
     Infos *user;
     user = (Infos *)malloc(sizeof(Infos));
 
-    player(user); 
-
-    printf("Nome: %s\n", user->nome);
-    printf("Dificuldade: %d\n", user->dificuldade);
-
-    free(user);
+    player(user);  */
 
     //timer();
     //alocaMemória();
-    //menu();
-    //game();
+
+    /*
+    FILE *file = fopen("arquivo.txt", "a"); //se existir ele deleta e cria novo vazio || sobreescreve arquivo
+    if (file == NULL) {
+        perror("Error opening file");
+        return 1;
+    }
+    */
+
+    //fprintf(file, "|Ranking | Pontuação | Tempo | Nome Completo |\n");
+
+    menu();
+    game();
     //liberaMemoria();
+
+    /*fscanf(file, "%f", &ranking);
+
+    ranking+=1;
+
+    fprintf(file, "| %d | aaa | aaa | aaa | %s", (int)ranking, user->nome);
+
+    fclose(file);
+
+    free(user);*/
 
     return 0;
 

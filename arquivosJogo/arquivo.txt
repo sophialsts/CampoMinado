@@ -1,1 +1,2 @@
-| Ranking | Nome | Pontuação |
+|Ranking | Pontuação | Tempo | Nome Completo |
+1 | aaa | aaa | aaa | Sophia Lima
