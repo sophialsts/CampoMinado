@@ -6,7 +6,6 @@
 #define tamCampo 8
 
 // ponteiro para armazenar quantidade de casas que o jogador conseguiu revelar
-// struct para toda parte de arquivo, alocar memória pra ele e liberar depois de fechar o arquivo
 
 enum casas {Vazio = 0, umaProx = 1, duasProx = 2, tresProx = 3, quatroProx = 4, naoRevelado = 5, Bomba = 6};
 int lose = 1;
@@ -20,26 +19,6 @@ typedef struct{
         int pontuação;
     } Infos;
 
-/*
-void alocaMemória() {
-    M = malloc(tamCampo * sizeof(*M));
-
-    if (M == NULL) {
-        printf("Erro ao alocar memória!\n");
-        exit(1);
-    }
-
-    return;
-}*/
-
-/*
-void liberaMemoria() {
-    if (M != NULL) {
-        free(M);
-    }
-}*/
-
-
 void clean(){
     #ifdef _WIN32
         system("cls");
@@ -47,19 +26,6 @@ void clean(){
         system("clear");
     #endif
 }
-
-/*int timer(){
-
-    int segundos = 0;
-
-    while(lose){ 
-        sleep(1);
-        segundos++;
-    };
-
-    return segundos;
-}*/
-
 
 void menu(){
 
@@ -167,14 +133,18 @@ void revela(int linha, int coluna){
 
     if (M[linha][coluna] == Vazio) {
         revelados[linha][coluna] = Vazio;
-    } else {
+    } 
+    else {
         return; //não chegar a recursão em células diferentes das vazias
     }
 
     for (int i = linha - 1; i <= linha + 1; i++) {
         for (int j = coluna - 1; j <= coluna + 1; j++) {
                 if(!verificaCoordenadas(i,j)) continue;
-                if (revelados[i][j] != Vazio) revela(i, j);
+                if(revelados[i][j] != Vazio) { //isso é diferente de M[i][j] != Vazio !!!
+                    revelados[i][j] = M[i][j];
+                    revela(i, j);
+                    }
                 /*revelados[i][j] != Vazio, para não chamar recursão de novo em células já vazias e reveladas,
                 se essa condição for verdadeira, os revelados[i][j] == naoRevelados entrarão, sobre números revelados, nem chegarão aqui*/
             }
@@ -229,6 +199,7 @@ else return 0;
 
 void game(){
 
+    
     int linha, coluna;
 
     plantaBomba();
@@ -308,74 +279,76 @@ void player(Infos *user){
     char nomeCompleto[50];
     int nível;
 
-    printf("Digite seu 1º nome:\n");
+    printf("                                                                         Digite seu 1º nome:");
     gets(nome);
-    printf("Digite seu sobrenome:\n");
+    printf("\n                                                                         Digite seu sobrenome:");
     gets(sobrenome);
 
     clean();
 
-    snprintf(nomeCompleto, sizeof(nomeCompleto), "%s %s", nome, sobrenome);
+    snprintf(user->nome, sizeof(nomeCompleto), "%s %s", nome, sobrenome);
 
     do {
     printf("Selecione um nível de jogo: / 1 / 2 / 3 /\n");
-    scanf("%d", &nível);
-    } while (nível > 3 || nível < 1);
+    scanf("%d", &user->dificuldade);
+    } while (user->dificuldade > 3 || user->dificuldade < 1);
 
-    strcpy(user->nome, nomeCompleto);
-    user->dificuldade = nível;
-    
 } 
 
-void points(){
+void points(Infos *user, int *time){
+
+    user->pontuação;
+
+    user->dificuldade;
+
+}
+
+void formatTime(int *time, int *seg, int *min){
+
+    *seg = *time % 60;
+    *min = (*time - *seg) / 60;
 
 }
 
 int main(){
 
     //colocar jogadas
-
-    /*for(int i = 0; i < tamCampo ; i++){
-        for(int j = 0; j < tamCampo ; j++){
-            revelados[i][j] = naoRevelado;
-        }
-    } */
-
-    /*
+    int tempo;
+    int minutos;
+    int segundos;
     int pontuação = 0;
     float ranking;
 
     Infos *user;
     user = (Infos *)malloc(sizeof(Infos));
 
-    player(user);  */
-
-    //timer();
-    //alocaMemória();
-
-    /*
+    menu();
+    clean();
+    player(user); 
+    time_t inicio = time(NULL); 
+    game();
+    time_t fim = time(NULL);
+    tempo = fim-inicio;
+    formatTime(&tempo,&segundos,&minutos);
+    //pontuação = points(user,&tempo,&pontuação);
+    
     FILE *file = fopen("arquivo.txt", "a"); //se existir ele deleta e cria novo vazio || sobreescreve arquivo
     if (file == NULL) {
         perror("Error opening file");
         return 1;
     }
-    */
 
-    //fprintf(file, "|Ranking | Pontuação | Tempo | Nome Completo |\n");
+    fprintf(file, "| Ranking |  Nome Completo  | Pontuação | Tempo | Dificuldade |\n");
 
-    menu();
-    game();
-    //liberaMemoria();
-
-    /*fscanf(file, "%f", &ranking);
+    fscanf(file, "%f", &ranking);
 
     ranking+=1;
 
-    fprintf(file, "| %d | aaa | aaa | aaa | %s", (int)ranking, user->nome);
+    fprintf(file, "|    %d    | %s | %d | %d:%d | %d |", (int)ranking,user->nome,pontuação,minutos,segundos,user->dificuldade);
 
     fclose(file);
 
-    free(user);*/
+    free(user);
 
     return 0;
 
