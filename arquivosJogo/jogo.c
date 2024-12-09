@@ -3,13 +3,13 @@
 #include <string.h>
 #include <unistd.h>
 #include <time.h>
-#define tamCampo 8
+#define tamCampo 7
+#define numMaxPlayers 20
 
 // ponteiro para armazenar quantidade de casas que o jogador conseguiu revelar
 
 enum casas {Vazio = 0, umaProx = 1, duasProx = 2, tresProx = 3, quatroProx = 4, naoRevelado = 5, Bomba = 6};
 int lose = 1;
-//int (*M)[tamCampo] = NULL; //(*M) ponteiro para array
 int revelados[tamCampo][tamCampo];
 int M[tamCampo][tamCampo];
 
@@ -153,9 +153,13 @@ void revela(int linha, int coluna){
 }
 
 void prtMatriz(){
+
+    int qLinhas = ((tamCampo-3)*3)+(tamCampo-3);
+
     printf("\n                                                                      |");
         for (int i = 0; i < tamCampo; i++) printf(" %d |",i);
-        printf("\n                                                                   ———————————————————————————————————");
+        printf("\n                                                                   ————————————————");
+        for(int i=0;i<qLinhas;i++) printf("—");
         for (int i = 0; i < tamCampo; i++) {
             printf("    \n");
             printf("                                                                    %d |",i);
@@ -164,11 +168,13 @@ void prtMatriz(){
                     if(revelados[i][j] != naoRevelado){
                         if(revelados[i][j] == Vazio) printf("   |\n");
                         else printf(" %d |\n", revelados[i][j]);
-                        printf("                                                                   ———————————————————————————————————");
+                        printf("                                                                   ————————————————");
+                        for(int i=0;i<qLinhas;i++) printf("—");
                     }
                     else {
                         printf("▆▆▆|\n");
-                        printf("                                                                   ———————————————————————————————————");
+                        printf("                                                                   ————————————————");
+                        for(int i=0;i<qLinhas;i++) printf("—");
                     }
                 }
                 else if (revelados[i][j] == naoRevelado){
@@ -310,20 +316,34 @@ void formatTime(int *time, int *seg, int *min){
 
 }
 
+int addPlayer(float *ranking,int *minutos, int *segundos, Infos *user){
+
+    FILE *file = fopen("arquivo.txt", "a"); //se existir ele deleta e cria novo vazio || sobreescreve arquivo
+
+    if (file == NULL) {
+        perror("Error opening file");
+        return 1;
+    }
+
+    fprintf(file, "|    %d    | %d | %d:%d | %d | %s |\n", (int)(*ranking),user->pontuação,*minutos,*segundos,user->dificuldade,user->nome);
+
+    fclose(file);
+
+}
+
 int main(){
 
     //colocar jogadas
     int tempo;
     int minutos;
     int segundos;
-    int pontuação = 0;
-    float ranking;
+    float ranking = 1;
 
     Infos *user;
-    user = (Infos *)malloc(sizeof(Infos));
+    user = (Infos *)malloc(sizeof(Infos) * numMaxPlayers);
 
-    menu();
-    clean();
+    //menu();
+    //clean();
     player(user); 
     time_t inicio = time(NULL); 
     game();
@@ -332,21 +352,33 @@ int main(){
     formatTime(&tempo,&segundos,&minutos);
     //pontuação = points(user,&tempo,&pontuação);
     
-    FILE *file = fopen("arquivo.txt", "a"); //se existir ele deleta e cria novo vazio || sobreescreve arquivo
-    if (file == NULL) {
-        perror("Error opening file");
-        return 1;
-    }
+    /**********************************************************ADIÇÃO DO JOGADOR ATUAL********************************************************************/
 
-    fprintf(file, "| Ranking |  Nome Completo  | Pontuação | Tempo | Dificuldade |\n");
+    addPlayer(&ranking,&minutos,&segundos,user);
 
-    fscanf(file, "%f", &ranking);
+    /***************************************************LEITURA DO ARQUIVO PARA STRUCT LOCAL**************************************************************/
 
-    ranking+=1;
 
-    fprintf(file, "|    %d    | %s | %d | %d:%d | %d |", (int)ranking,user->nome,pontuação,minutos,segundos,user->dificuldade);
 
-    fclose(file);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     free(user);
 

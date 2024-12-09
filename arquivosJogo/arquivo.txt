@@ -1,3 +1,1 @@
-| Ranking |  Nome Completo  | Pontuação | Tempo | Dificuldade |
-|    1   | Sophia Lima | 0 | -2:-3 | 1 || Ranking |  Nome Completo  | Pontuação | Tempo | Dificuldade |
-|    1    | s a | 0 | 1:47 | 1 |
+| Ranking | Pontuação | Tempo | Dificuldade | Nome Completo | 
