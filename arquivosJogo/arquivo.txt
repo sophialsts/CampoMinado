@@ -2,3 +2,11 @@
 
 |    1    | 4550 | 1:20 | 3 | Sophia Lima |
 |    1    | 3800 | 0:57 | 1 | Sophia Lima |
+|    1    | 4500 | 0:52 | 1 | Sophia Lima |
+|    1    | 2950 | 2:3 | 3 | Sophia Lima |
+|    1    | 3150 | 0:37 | 1 | Sophia Lima |
+|    1    | 3100 | 0:37 | 1 | Sophia Lima |
+|    1    | 3350 | 0:58 | 1 | Sophia Lima |
+|    1    | 3100 | 0:48 | 1 | Sophia Lima |
+|    1    | 2600 | 1:27 | 1 | Sophia Lima |
+|    1    | 4700 | 0:9 | 1 | s l |

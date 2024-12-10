@@ -131,8 +131,11 @@ int plantaBomba(){
 
 void revela(int linha, int coluna, Infos *user){
 
+    int numAberto = 0;
+
     if (M[linha][coluna] == Vazio) {
         revelados[linha][coluna] = Vazio;
+        user->pontuação += 50;
     } 
     else {
         return; //não chegar a recursão em células diferentes das vazias
@@ -142,9 +145,9 @@ void revela(int linha, int coluna, Infos *user){
         for (int j = coluna - 1; j <= coluna + 1; j++) {
                 if(!verificaCoordenadas(i,j)) continue;
                 if(revelados[i][j] != Vazio) { //isso é diferente de M[i][j] != Vazio !!!
-                    revelados[i][j] = M[i][j];
-                    user->pontuação += 50;
-                    revela(i, j,user);
+                if(revelados[i][j] == naoRevelado){ printf(" aqqq %d\n", revelados[i][j]);}
+                revelados[i][j] = M[i][j];
+                revela(i, j,user);
                     }
                 /*revelados[i][j] != Vazio, para não chamar recursão de novo em células já vazias e reveladas,
                 se essa condição for verdadeira, os revelados[i][j] == naoRevelados entrarão, sobre números revelados, nem chegarão aqui*/
@@ -249,10 +252,12 @@ void game(Infos *user){
                 break; 
             case Vazio:
                 revela(linha,coluna,user);
+                printf("%d",user->pontuação);
                 break;
             default:
                 revelados[linha][coluna] = M[linha][coluna];
                 user->pontuação += 50;
+                break;
         }
 
         if(win()) {
@@ -272,7 +277,7 @@ void game(Infos *user){
             sleep(3); 
             return;
         }
-            clean();
+            //clean();
 
     }
     printf("\n\n");
@@ -304,26 +309,36 @@ void player(Infos *user){
 
 void points(Infos *user, int *minutes){
 
-    int intervalos[5] = {0,1,2,3,4};
+    int intervalos[5] = {1,2,3,4,5};
     int pontuações[5] = {500,300,100,75,50};
+
+    printf("%d/n", user->pontuação);
 
     if(!lose) user->pontuação += 500;
     
+    printf("%d/n", user->pontuação);
+
     switch(user->dificuldade){
         case 1:
             break;
         case 2:
             user->pontuação +=100;
+            break;
         case 3:
             user->pontuação += 300;
+            break;
     }
 
+    printf("%d\n", user->pontuação);
+
     for(int i = 0; i < 6 ; i++){
-        if(intervalos[i] < *minutes) {
+        if(*minutes < intervalos[i]) {
             user->pontuação += pontuações[i]; //erro ta aq, ta somando tds
             break;
         }
     }
+
+    printf("%d\n", user->pontuação);
 
 }
 
