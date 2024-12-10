@@ -129,7 +129,7 @@ int plantaBomba(){
 
 }
 
-void revela(int linha, int coluna){
+void revela(int linha, int coluna, Infos *user){
 
     if (M[linha][coluna] == Vazio) {
         revelados[linha][coluna] = Vazio;
@@ -143,7 +143,8 @@ void revela(int linha, int coluna){
                 if(!verificaCoordenadas(i,j)) continue;
                 if(revelados[i][j] != Vazio) { //isso é diferente de M[i][j] != Vazio !!!
                     revelados[i][j] = M[i][j];
-                    revela(i, j);
+                    user->pontuação += 50;
+                    revela(i, j,user);
                     }
                 /*revelados[i][j] != Vazio, para não chamar recursão de novo em células já vazias e reveladas,
                 se essa condição for verdadeira, os revelados[i][j] == naoRevelados entrarão, sobre números revelados, nem chegarão aqui*/
@@ -203,7 +204,7 @@ else return 0;
 
 }
 
-void game(){
+void game(Infos *user){
 
     
     int linha, coluna;
@@ -247,13 +248,15 @@ void game(){
                 clean();
                 break; 
             case Vazio:
-                revela(linha,coluna);
+                revela(linha,coluna,user);
                 break;
             default:
                 revelados[linha][coluna] = M[linha][coluna];
+                user->pontuação += 50;
         }
 
         if(win()) {
+            lose = 0;
             clean();
             printf("\n\n\n\n\n\n\n\n");
             printf("                                                                                    P A R A B É N S !\n");
@@ -290,8 +293,6 @@ void player(Infos *user){
     printf("\n                                                                         Digite seu sobrenome:");
     gets(sobrenome);
 
-    clean();
-
     snprintf(user->nome, sizeof(nomeCompleto), "%s %s", nome, sobrenome);
 
     do {
@@ -301,11 +302,25 @@ void player(Infos *user){
 
 } 
 
-void points(Infos *user, int *time){
+void points(Infos *user, int *minutes){
 
-    user->pontuação;
+    int intervalos[5] = {1,2,3,4,5};
+    int pontuações[5] = {500,300,100,75,50};
 
-    user->dificuldade;
+    if(!lose) user->pontuação += 500;
+    
+    switch(user->dificuldade){
+        case 1:
+            break;
+        case 2:
+            user->pontuação +=100;
+        case 3:
+            user->pontuação += 300;
+    }
+
+    for(int i = 1; i < 6 ; i++){
+        if(*time < intervalos[i]) user->pontuação += pontuações[i];
+    }
 
 }
 
@@ -346,11 +361,11 @@ int main(){
     //clean();
     player(user); 
     time_t inicio = time(NULL); 
-    game();
+    game(user);
     time_t fim = time(NULL);
     tempo = fim-inicio;
     formatTime(&tempo,&segundos,&minutos);
-    //pontuação = points(user,&tempo,&pontuação);
+    points(user,&minutos);
     
     /**********************************************************ADIÇÃO DO JOGADOR ATUAL********************************************************************/
 
