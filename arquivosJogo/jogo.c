@@ -115,19 +115,17 @@ int plantaBomba(Infos *user){
 
     switch(user->dificuldade){
         case 1:
-            if(tamCampo % 2 == 0) qBombVaria = tamCampo/2;
-            else qBombVaria = (tamCampo-1)/2;
+            qBombVaria = tamCampo/2;
             break;
         case 2:
-            if(tamCampo % 2 == 0) qBombVaria = tamCampo/2+tamCampo/4;
-            else qBombVaria = (tamCampo-1)/2 + (tamCampo-1)/4;
+            qBombVaria = tamCampo/2+tamCampo/3;
             break;
         case 3:
             qBombVaria = tamCampo;
             break;
     }
 
-    while(quantBombT < qBombVaria){
+    while(quantBombT < tamCampo-2){
 
         do{
             linBomb = ((rand() % tamCampo)); //antes tava mod 5 + 1, o que poderia gerar índice fora da matriz
@@ -144,7 +142,7 @@ int plantaBomba(Infos *user){
 
 }
 
-void revela(int linha, int coluna, Infos *user){
+void revela(int linha, int coluna, Infos *user){ //chamada recursiva
 
     if(!verificaCoordenadas(linha,coluna) || revelados[linha][coluna] != naoRevelado){
         return;
@@ -205,30 +203,31 @@ void prtMatriz(){
         }
     }
 
-int win(int quantidadeBomb){
+int win(int limitaBomba){
 
-int cont = 0;
+    int cont = 0;
 
-for (int i = 0; i < tamCampo; i++) {
-    for (int j = 0; j < tamCampo; j++) {
-        if(revelados[i][j] != naoRevelado) cont++; 
+    for (int i = 0; i < tamCampo; i++) {
+        for (int j = 0; j < tamCampo; j++) {
+            if(revelados[i][j] != naoRevelado) cont++; 
+        }
     }
-}
 
-if(cont == ((tamCampo*tamCampo) - quantidadeBomb)) return 1;
-else return 0;
+    if(cont == ((tamCampo*tamCampo) - limitaBomba)) return 1;
+    else return 0;
 
 }
 
 void game(Infos *user){
+
     
     int linha, coluna;
 
-    plantaBomba(user);
+    int bombDefinidas = plantaBomba(user);
     preencheCampo();
     clean();
 
-    while(lose == 1 && win() == 0){
+    while(lose == 1 && win(bombDefinidas) == 0){
 
         prtMatriz();
 
@@ -271,7 +270,7 @@ void game(Infos *user){
                 break;
         }
 
-        if(win(plantaBomba(user))) {
+        if(win(bombDefinidas)) {
             lose = 0;
             clean();
             printf("\n\n\n\n\n\n\n\n");
@@ -361,14 +360,15 @@ int addPlayer(float *ranking,int *minutos, int *segundos, Infos *user){
         return 1;
     }
 
-    fprintf(file, "|    %d    |    %d    | %d:%d |      %d      | %s ", (int)(*ranking),user->pontuação,*minutos,*segundos,user->dificuldade,user->nome);
+    fprintf(file, "|    %d    |    %d    | %d:%d  |      %d      | %s ", (int)(*ranking),user->pontuação,*minutos,*segundos,user->dificuldade,user->nome);
     fclose(file);
 
 }
 
 int main(){
-
+    //wasd
     //colocar jogadas
+    
     int tempo;
     int minutos;
     int segundos;
@@ -392,7 +392,6 @@ int main(){
     addPlayer(&ranking,&minutos,&segundos,user);
 
     /************************************************************LEITURA DO ARQUIVO PARA STRUCT LOCAL E ORDENAÇÃO***************************************************************************/
-
 
     /****************************************************************************ATUALIZAR ARQUIVO******************************************************************************************/
 
