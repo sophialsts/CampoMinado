@@ -131,29 +131,27 @@ int plantaBomba(){
 
 void revela(int linha, int coluna, Infos *user){
 
-    int numAberto = 0;
-
-    if (M[linha][coluna] == Vazio) {
-        revelados[linha][coluna] = Vazio;
-        user->pontuação += 50;
-    } 
-    else {
-        return; //não chegar a recursão em células diferentes das vazias
+    if(!verificaCoordenadas(linha,coluna) || revelados[linha][coluna] != naoRevelado){
+        return;
     }
 
-    for (int i = linha - 1; i <= linha + 1; i++) {
-        for (int j = coluna - 1; j <= coluna + 1; j++) {
-                if(!verificaCoordenadas(i,j)) continue;
-                if(revelados[i][j] != Vazio) { //isso é diferente de M[i][j] != Vazio !!!
-                if(revelados[i][j] == naoRevelado){ printf(" aqqq %d\n", revelados[i][j]);}
-                revelados[i][j] = M[i][j];
-                revela(i, j,user);
-                    }
-                /*revelados[i][j] != Vazio, para não chamar recursão de novo em células já vazias e reveladas,
-                se essa condição for verdadeira, os revelados[i][j] == naoRevelados entrarão, sobre números revelados, nem chegarão aqui*/
+    revelados[linha][coluna] = M[linha][coluna];
+
+    user->pontuação += 50;
+
+    if(M[linha][coluna] == Vazio){
+        for (int i = linha - 1; i <= linha + 1; i++) {
+            for (int j = coluna - 1; j <= coluna + 1; j++) {
+                    if(!verificaCoordenadas(i,j)) continue;
+                    if(revelados[i][j] != Vazio) { //isso é diferente de M[i][j] != Vazio !!!
+                        if(i == linha && j == coluna) continue;
+                        revela(i, j,user);
+                        }
+                    /*revelados[i][j] != Vazio, para não chamar recursão de novo em células já vazias e reveladas,
+                    se essa condição for verdadeira, os revelados[i][j] == naoRevelados entrarão, sobre números revelados, nem chegarão aqui*/
+                }
             }
-        }
-    
+    }
 }
 
 void prtMatriz(){
@@ -277,7 +275,7 @@ void game(Infos *user){
             sleep(3); 
             return;
         }
-            //clean();
+            clean();
 
     }
     printf("\n\n");
@@ -312,11 +310,7 @@ void points(Infos *user, int *minutes){
     int intervalos[5] = {1,2,3,4,5};
     int pontuações[5] = {500,300,100,75,50};
 
-    printf("%d/n", user->pontuação);
-
     if(!lose) user->pontuação += 500;
-    
-    printf("%d/n", user->pontuação);
 
     switch(user->dificuldade){
         case 1:
@@ -329,16 +323,12 @@ void points(Infos *user, int *minutes){
             break;
     }
 
-    printf("%d\n", user->pontuação);
-
     for(int i = 0; i < 6 ; i++){
         if(*minutes < intervalos[i]) {
             user->pontuação += pontuações[i]; //erro ta aq, ta somando tds
             break;
         }
     }
-
-    printf("%d\n", user->pontuação);
 
 }
 
@@ -358,8 +348,7 @@ int addPlayer(float *ranking,int *minutos, int *segundos, Infos *user){
         return 1;
     }
 
-    fprintf(file, "|    %d    | %d | %d:%d | %d | %s |\n", (int)(*ranking),user->pontuação,*minutos,*segundos,user->dificuldade,user->nome);
-
+    fprintf(file, "|    %d    |    %d    | %d:%d |      %d      | %s \n", (int)(*ranking),user->pontuação,*minutos,*segundos,user->dificuldade,user->nome);
     fclose(file);
 
 }
@@ -375,8 +364,8 @@ int main(){
     Infos *user;
     user = (Infos *)malloc(sizeof(Infos) * numMaxPlayers);
 
-    //menu();
-    //clean();
+    menu();
+    clean();
     player(user); 
     time_t inicio = time(NULL); 
     game(user);
@@ -385,31 +374,14 @@ int main(){
     formatTime(&tempo,&segundos,&minutos);
     points(user,&minutos);
     
-    /**********************************************************ADIÇÃO DO JOGADOR ATUAL********************************************************************/
+    /***********************************************************************ADIÇÃO DO JOGADOR ATUAL*****************************************************************************************/
 
     addPlayer(&ranking,&minutos,&segundos,user);
 
-    /***************************************************LEITURA DO ARQUIVO PARA STRUCT LOCAL**************************************************************/
+    /************************************************************LEITURA DO ARQUIVO PARA STRUCT LOCAL E ORDENAÇÃO***************************************************************************/
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    /****************************************************************************ATUALIZAR ARQUIVO******************************************************************************************/
 
 
 
