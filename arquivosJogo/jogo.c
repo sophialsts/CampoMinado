@@ -104,15 +104,30 @@ void preencheCampo(){
 
 }
 
-int plantaBomba(){
+int plantaBomba(Infos *user){
 
     int quantBombT = 0;
     int linBomb;
     int colBomb;
+    int qBombVaria;
 
     srand(time(NULL));
 
-    while(quantBombT < tamCampo-2){
+    switch(user->dificuldade){
+        case 1:
+            if(tamCampo % 2 == 0) qBombVaria = tamCampo/2;
+            else qBombVaria = (tamCampo-1)/2;
+            break;
+        case 2:
+            if(tamCampo % 2 == 0) qBombVaria = tamCampo/2+tamCampo/4;
+            else qBombVaria = (tamCampo-1)/2 + (tamCampo-1)/4;
+            break;
+        case 3:
+            qBombVaria = tamCampo;
+            break;
+    }
+
+    while(quantBombT < qBombVaria){
 
         do{
             linBomb = ((rand() % tamCampo)); //antes tava mod 5 + 1, o que poderia gerar índice fora da matriz
@@ -190,7 +205,7 @@ void prtMatriz(){
         }
     }
 
-int win(){
+int win(int quantidadeBomb){
 
 int cont = 0;
 
@@ -200,17 +215,16 @@ for (int i = 0; i < tamCampo; i++) {
     }
 }
 
-if(cont == ((tamCampo*tamCampo) - (tamCampo-2))) return 1;
+if(cont == ((tamCampo*tamCampo) - quantidadeBomb)) return 1;
 else return 0;
 
 }
 
 void game(Infos *user){
-
     
     int linha, coluna;
 
-    plantaBomba();
+    plantaBomba(user);
     preencheCampo();
     clean();
 
@@ -250,7 +264,6 @@ void game(Infos *user){
                 break; 
             case Vazio:
                 revela(linha,coluna,user);
-                printf("%d",user->pontuação);
                 break;
             default:
                 revelados[linha][coluna] = M[linha][coluna];
@@ -258,7 +271,7 @@ void game(Infos *user){
                 break;
         }
 
-        if(win()) {
+        if(win(plantaBomba(user))) {
             lose = 0;
             clean();
             printf("\n\n\n\n\n\n\n\n");
@@ -299,7 +312,7 @@ void player(Infos *user){
     snprintf(user->nome, sizeof(nomeCompleto), "%s %s", nome, sobrenome);
 
     do {
-    printf("Selecione um nível de jogo: / 1 / 2 / 3 /\n");
+    printf("\n                                                            Selecione um nível de jogo entre esses / 1 / 2 / 3 /: ");
     scanf("%d", &user->dificuldade);
     } while (user->dificuldade > 3 || user->dificuldade < 1);
 
@@ -348,7 +361,7 @@ int addPlayer(float *ranking,int *minutos, int *segundos, Infos *user){
         return 1;
     }
 
-    fprintf(file, "|    %d    |    %d    | %d:%d |      %d      | %s \n", (int)(*ranking),user->pontuação,*minutos,*segundos,user->dificuldade,user->nome);
+    fprintf(file, "|    %d    |    %d    | %d:%d |      %d      | %s ", (int)(*ranking),user->pontuação,*minutos,*segundos,user->dificuldade,user->nome);
     fclose(file);
 
 }
