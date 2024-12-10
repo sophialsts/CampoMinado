@@ -1,2 +1,0 @@
-| Ranking |  Pontuação | Tempo | Dificuldade | Nome Completo 
-|    1    |    3500    | 0:55  |      3      | a a |    1    |    3300    | 0:36  |      2      | a a 
