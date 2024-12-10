@@ -175,6 +175,37 @@ void revela(int linha, int coluna, Infos *user){ //chamada recursiva
     }
 }
 
+void campoRevelado(){
+
+   int qLinhas = ((tamCampo-3)*3)+(tamCampo-3);
+
+    printf(AZUL "\n                                                                      |" RESET);
+        for (int i = 0; i < tamCampo; i++) printf(CIANO " %d |" RESET ,i);
+        printf(AZUL "\n                                                                   ————————————————" RESET);
+        for(int i=0;i<qLinhas;i++) printf(AZUL "—" RESET);
+        for (int i = 0; i < tamCampo; i++) {
+            printf("    \n");
+            printf(CIANO "                                                                    %d |"RESET ,i);
+            for (int j = 0; j < tamCampo; j++) {
+                if(j == tamCampo -1){
+                    if(M[i][j] != naoRevelado){
+                        if(M[i][j] == Vazio) printf(AZUL "   |\n" RESET);
+                        else if(M[i][j] == Bomba) printf(" ⦰ |\n" RESET);
+                        else printf(CINZA " %d |\n"RESET , M[i][j]);
+                        printf(AZUL "                                                                   ————————————————" RESET);
+                        for(int i=0;i<qLinhas;i++) printf(AZUL "—" RESET);
+                    }
+                }
+                else {
+                    if(M[i][j] == Vazio) printf(CINZA "   |" RESET);
+                    else if(M[i][j] == Bomba) printf(" ⦰ |");
+                    else printf(CINZA " %d |" RESET , M[i][j]);
+                }
+            }
+        }
+
+}
+
 void prtMatriz(){
 
     int qLinhas = ((tamCampo-3)*3)+(tamCampo-3);
@@ -248,7 +279,7 @@ void game(Infos *user){
             printf("                                                                     Digite a coluna que deseja:" RESET);
             scanf("%d", &coluna);
             if(!verificaCoordenadas(linha,coluna)) {
-                printf("                                                                       Digite coordenadas válidas\n" RESET);
+                printf(MAGENTA "                                                                       Digite coordenadas válidas\n" RESET);
                 sleep(1);
                 }
             else if(revelados[linha][coluna] != naoRevelado){
@@ -263,7 +294,7 @@ void game(Infos *user){
                 revelados[linha][coluna] = M[linha][coluna];
                 prtMatriz();
                 printf(MAGENTA "\n\n                                                                Você selecionou um local com bomba :c\n" RESET);
-                sleep(5);
+                sleep(7);
                 clean();
                 printf("\n\n\n\n\n\n\n\n");
                 printf("                                                                     ⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤\n");
@@ -288,9 +319,10 @@ void game(Infos *user){
             lose = 0;
             clean();
             printf("\n\n\n\n\n\n\n\n");
-            printf(VERDE "                                                                                    P A R A B É N S !\n");
-            printf("                                                                     V O C Ê     E N C E R R O U     O     J O G O!\n" RESET);
-            sleep(3);
+            printf(VERDE "                                                                           P A R A B É N S !\n");
+            printf("                                                              V O C Ê     E N C E R R O U     O     J O G O!\n" RESET);
+            campoRevelado();
+            sleep(7);
             clean();
             printf("\n\n\n\n\n\n\n\n");
             printf("                                                                     ⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤\n");
@@ -309,8 +341,6 @@ void game(Infos *user){
 }
 
 void player(Infos *user){
-
-    //le direto
 
     char nome[20];
     char sobrenome[20];
@@ -380,6 +410,7 @@ int addPlayer(float *ranking,int *minutos, int *segundos, Infos *user){
 }
 
 int main(){
+
     //wasd
     //colocar jogadas
     
@@ -406,6 +437,8 @@ int main(){
     addPlayer(&ranking,&minutos,&segundos,user);
 
     /************************************************************LEITURA DO ARQUIVO PARA STRUCT LOCAL E ORDENAÇÃO***************************************************************************/
+
+
 
     /****************************************************************************ATUALIZAR ARQUIVO******************************************************************************************/
 
