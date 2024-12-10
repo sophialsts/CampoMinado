@@ -3,6 +3,14 @@
 #include <string.h>
 #include <unistd.h>
 #include <time.h>
+#define RESET "\033[0m"
+#define CIANO "\033[36m"
+#define PRETO "\033[30m"
+#define AZUL "\033[34m"
+#define CINZA "\033[37m"
+#define VERDE "\033[32m"
+#define MAGENTA "\033[35m"
+#define VERMELHO "\033[31m"
 #define tamCampo 7
 #define numMaxPlayers 20
 
@@ -32,8 +40,8 @@ void menu(){
     char start;
 
     printf("\n");
-    printf("                                                         B E M     V I N D O      A O     C A M P O     M I N A D O\n");
-    printf("                                                         ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\n");
+    printf(MAGENTA "                                                         B E M     V I N D O      A O     C A M P O     M I N A D O\n" RESET);
+    printf(PRETO "                                                         ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\n" RESET);
     printf("                                                                                         _❈ \n");
     printf("                                                                                        /\n");
     printf("                                                                                   ✩✩✩✩✩✩\n");
@@ -41,7 +49,7 @@ void menu(){
     printf("                                                                                ✩✩✩✩✩✩✩✩✩✩✩\n");
     printf("                                                                                 ✩✩✩✩✩✩✩✩✩\n");
     printf("                                                                                  ✩✩✩✩✩✩✩\n\n");
-    printf("                                                                         Clique enter para começar!");
+    printf(MAGENTA"                                                                         Clique enter para começar!" RESET);
     
     scanf("%c", &start);
     if(start == '\n') return;
@@ -171,35 +179,35 @@ void prtMatriz(){
 
     int qLinhas = ((tamCampo-3)*3)+(tamCampo-3);
 
-    printf("\n                                                                      |");
-        for (int i = 0; i < tamCampo; i++) printf(" %d |",i);
-        printf("\n                                                                   ————————————————");
-        for(int i=0;i<qLinhas;i++) printf("—");
+    printf(AZUL "\n                                                                      |" RESET);
+        for (int i = 0; i < tamCampo; i++) printf(CIANO " %d |" RESET ,i);
+        printf(AZUL "\n                                                                   ————————————————" RESET);
+        for(int i=0;i<qLinhas;i++) printf(AZUL "—" RESET);
         for (int i = 0; i < tamCampo; i++) {
             printf("    \n");
-            printf("                                                                    %d |",i);
+            printf(CIANO "                                                                    %d |"RESET ,i);
             for (int j = 0; j < tamCampo; j++) {
                 if(j == tamCampo -1){
                     if(revelados[i][j] != naoRevelado){
-                        if(revelados[i][j] == Vazio) printf("   |\n");
-                        else if(revelados[i][j] == Bomba) printf(" o* |\n");
-                        else printf(" %d |\n", revelados[i][j]);
-                        printf("                                                                   ————————————————");
-                        for(int i=0;i<qLinhas;i++) printf("—");
+                        if(revelados[i][j] == Vazio) printf(AZUL "   |\n" RESET);
+                        else if(revelados[i][j] == Bomba) printf(" o* |\n" RESET);
+                        else printf(CINZA " %d |\n"RESET , revelados[i][j]);
+                        printf(AZUL "                                                                   ————————————————" RESET);
+                        for(int i=0;i<qLinhas;i++) printf(AZUL "—" RESET);
                     }
                     else {
                         printf("▆▆▆|\n");
-                        printf("                                                                   ————————————————");
-                        for(int i=0;i<qLinhas;i++) printf("—");
+                        printf(AZUL "                                                                   ————————————————" RESET);
+                        for(int i=0;i<qLinhas;i++) printf(AZUL "—" RESET);
                     }
                 }
                 else if (revelados[i][j] == naoRevelado){
-                    printf("▆▆▆|"); 
+                    printf(CINZA "▆▆▆|" RESET); 
                     }
                 else {
-                    if(revelados[i][j] == Vazio) printf("   |");
+                    if(revelados[i][j] == Vazio) printf(CINZA "   |" RESET);
                     else if(revelados[i][j] == Bomba) printf(" ◯*|");
-                    else printf(" %d |", revelados[i][j]);
+                    else printf(CINZA " %d |" RESET , revelados[i][j]);
                 }
             }
         }
@@ -231,19 +239,20 @@ void game(Infos *user){
 
     while(lose == 1 && win(bombDefinidas) == 0){
 
+        printf("\n\n\n\n\n");
         prtMatriz();
 
         do{
-            printf("\n\n                                                                       Digite a linha que deseja:");
+            printf(MAGENTA "\n\n                                                                     Digite a linha que deseja:" );
             scanf("%d", &linha);
-            printf("                                                                       Digite a coluna que deseja:");
+            printf("                                                                     Digite a coluna que deseja:" RESET);
             scanf("%d", &coluna);
             if(!verificaCoordenadas(linha,coluna)) {
-                printf("                                                                       Digite coordenadas válidas\n");
+                printf("                                                                       Digite coordenadas válidas\n" RESET);
                 sleep(1);
                 }
             else if(revelados[linha][coluna] != naoRevelado){
-                printf("                                                                       Essa célula já foi selecionada.\n");
+                printf(MAGENTA "                                                                       Essa célula já foi selecionada.\n" RESET);
             }
         }
         while(!verificaCoordenadas(linha,coluna) || revelados[linha][coluna] != naoRevelado);
@@ -253,15 +262,15 @@ void game(Infos *user){
                 clean();
                 revelados[linha][coluna] = M[linha][coluna];
                 prtMatriz();
-                printf("\n\n                                                                Você selecionou um local com bomba :c\n");
+                printf(MAGENTA "\n\n                                                                Você selecionou um local com bomba :c\n" RESET);
                 sleep(5);
                 clean();
                 printf("\n\n\n\n\n\n\n\n");
                 printf("                                                                     ⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤\n");
-                printf("                                                                    ⎰                                  ⎱\n");
-                printf("                                                                    ⟪  D    E     F     E     A     T  ⟫\n");
-                printf("                                                                    ⎱                                  ⎰\n");
-                printf("                                                                     ⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤\n");
+                printf(VERMELHO"                                                                    ⎰                                  ⎱\n" );
+                printf("                                                                    ⟪  D    E     F     E     A     T  ⟫\n" );
+                printf("                                                                    ⎱                                  ⎰\n" RESET);
+                printf("                                                                     ⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤\n" );
                 sleep(3);
                 lose = 0;
                 clean();
@@ -279,15 +288,15 @@ void game(Infos *user){
             lose = 0;
             clean();
             printf("\n\n\n\n\n\n\n\n");
-            printf("                                                                                    P A R A B É N S !\n");
-            printf("                                                                     V O C Ê     E N C E R R O U     O     J O G O!\n");
+            printf(VERDE "                                                                                    P A R A B É N S !\n");
+            printf("                                                                     V O C Ê     E N C E R R O U     O     J O G O!\n" RESET);
             sleep(3);
             clean();
             printf("\n\n\n\n\n\n\n\n");
             printf("                                                                     ⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤\n");
-            printf("                                                                    ⎰                                  ⎱\n");
-            printf("                                                                    ⟪  V   I    C    T    O    R    Y  ⟫\n");
-            printf("                                                                    ⎱                                  ⎰\n");
+            printf(VERDE"                                                                    ⎰                                  ⎱\n" );
+            printf("                                                                    ⟪  V   I    C    T    O    R    Y ⟫\n" );
+            printf("                                                                    ⎱                                  ⎰\n" RESET);
             printf("                                                                     ⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤\n");
             sleep(3); 
             return;
@@ -308,15 +317,15 @@ void player(Infos *user){
     char nomeCompleto[50];
     int nível;
 
-    printf("                                                                         Digite seu 1º nome:");
+    printf(MAGENTA "                                                                         Digite seu 1º nome:" RESET);
     gets(nome);
-    printf("\n                                                                         Digite seu sobrenome:");
+    printf(MAGENTA "\n                                                                         Digite seu sobrenome:" RESET);
     gets(sobrenome);
 
     snprintf(user->nome, sizeof(nomeCompleto), "%s %s", nome, sobrenome);
 
     do {
-    printf("\n                                                            Selecione um nível de jogo entre esses / 1 / 2 / 3 /: ");
+    printf(MAGENTA "\n                                                            Selecione um nível de jogo entre esses / 1 / 2 / 3 /: " RESET);
     scanf("%d", &user->dificuldade);
     } while (user->dificuldade > 3 || user->dificuldade < 1);
 
