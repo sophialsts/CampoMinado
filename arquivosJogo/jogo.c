@@ -304,7 +304,7 @@ void player(Infos *user){
 
 void points(Infos *user, int *minutes){
 
-    int intervalos[5] = {1,2,3,4,5};
+    int intervalos[5] = {0,1,2,3,4};
     int pontuações[5] = {500,300,100,75,50};
 
     if(!lose) user->pontuação += 500;
@@ -318,8 +318,11 @@ void points(Infos *user, int *minutes){
             user->pontuação += 300;
     }
 
-    for(int i = 1; i < 6 ; i++){
-        if(*time < intervalos[i]) user->pontuação += pontuações[i];
+    for(int i = 0; i < 6 ; i++){
+        if(intervalos[i] < *minutes) {
+            user->pontuação += pontuações[i]; //erro ta aq, ta somando tds
+            break;
+        }
     }
 
 }

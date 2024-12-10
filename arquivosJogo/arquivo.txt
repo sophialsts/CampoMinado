@@ -1,3 +1,4 @@
 | Ranking | Pontuação | Tempo | Dificuldade | Nome Completo 
 
-|    1    | 4250 | 1:0 | 2 | Sophia Lima |
+|    1    | 4550 | 1:20 | 3 | Sophia Lima |
+|    1    | 3800 | 0:57 | 1 | Sophia Lima |
