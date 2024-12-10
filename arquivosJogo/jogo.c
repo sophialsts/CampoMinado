@@ -182,6 +182,7 @@ void prtMatriz(){
                 if(j == tamCampo -1){
                     if(revelados[i][j] != naoRevelado){
                         if(revelados[i][j] == Vazio) printf("   |\n");
+                        else if(revelados[i][j] == Bomba) printf(" o* |\n");
                         else printf(" %d |\n", revelados[i][j]);
                         printf("                                                                   ————————————————");
                         for(int i=0;i<qLinhas;i++) printf("—");
@@ -197,6 +198,7 @@ void prtMatriz(){
                     }
                 else {
                     if(revelados[i][j] == Vazio) printf("   |");
+                    else if(revelados[i][j] == Bomba) printf(" ◯*|");
                     else printf(" %d |", revelados[i][j]);
                 }
             }
@@ -248,8 +250,11 @@ void game(Infos *user){
 
         switch(M[linha][coluna]){
             case Bomba:
-                printf("                                                                  Você selecionou um local com bomba :c\n");
-                sleep(3);
+                clean();
+                revelados[linha][coluna] = M[linha][coluna];
+                prtMatriz();
+                printf("\n\n                                                                Você selecionou um local com bomba :c\n");
+                sleep(5);
                 clean();
                 printf("\n\n\n\n\n\n\n\n");
                 printf("                                                                     ⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤\n");
