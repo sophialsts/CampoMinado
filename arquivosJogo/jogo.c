@@ -50,10 +50,10 @@ void menu(){
     printf("                                                                                 ✩✩✩✩✩✩✩✩✩\n");
     printf("                                                                                  ✩✩✩✩✩✩✩\n\n");
     printf(MAGENTA"                                                                         Clique enter para começar!" RESET);
-    
+
     scanf("%c", &start);
     if(start == '\n') return;
-    
+
 }
 
 int verificaCoordenadas(int linha, int coluna) {
@@ -94,7 +94,7 @@ void verificaVizinhos(int linha, int coluna){
             M[linha][coluna] = Vazio;
             break;
     }
-    
+
 
 }
 
@@ -140,10 +140,10 @@ int plantaBomba(Infos *user){
             colBomb = ((rand() % tamCampo));
             }
         while((M[linBomb][colBomb] == Bomba)); //não plantar 2 bombas no mesmo lugar
-    
+
         quantBombT++;
         M[linBomb][colBomb] = Bomba;
-        
+
     }
 
     return quantBombT;
@@ -261,7 +261,7 @@ int win(int limitaBomba){
 
 void game(Infos *user){
 
-    
+
     int linha, coluna;
 
     int bombDefinidas = plantaBomba(user);
@@ -323,6 +323,7 @@ void game(Infos *user){
             printf("                                                              V O C Ê     E N C E R R O U     O     J O G O!\n" RESET);
             campoRevelado();
             sleep(7);
+            clean();
             printf("\n\n\n\n\n\n\n\n");
             printf("                                                                     ⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤\n");
             printf(VERDE"                                                                    ⎰                                  ⎱\n" );
@@ -394,56 +395,112 @@ void formatTime(int *time, int *seg, int *min){
 
 }
 
-int addPlayer(float *ranking,int *minutos, int *segundos, Infos *user){
+int addPlayer(int *minutos, int *segundos, Infos *user){
 
-    FILE *file = fopen("arquivo.txt", "a"); //se existir ele deleta e cria novo vazio || sobreescreve arquivo
+    FILE *file = fopen("ranking.txt", "a"); //se existir ele deleta e cria novo vazio || sobreescreve arquivo
 
     if (file == NULL) {
-        perror("Error opening file");
+        perror("Erro ao abrir arquivo");
         return 1;
     }
 
-    fprintf(file, "|    %d    |    %d    | %d:%d  |      %d      | %s ", (int)(*ranking),user->pontuação,*minutos,*segundos,user->dificuldade,user->nome);
+    fprintf(file, "|         |    %d    | %d:%d  |      %d      | %s ",user->pontuação,*minutos,*segundos,user->dificuldade,user->nome);
     fclose(file);
 
 }
+
+int orderRanking(float *ranking, int *minutos, int *segundos, Infos **users) {
+    FILE *file1 = fopen("ranking.txt", "r");
+
+    if (file1 == NULL) {
+        perror("Erro ao abrir arquivo.");
+        return 1;
+    }
+
+    char linha[100];
+    int cont = 0;
+
+    while (fgets(linha, sizeof(linha), file1) != NULL) {
+        sscanf(linha, "%d %d:%d %d %[^\n]", 
+               &users[cont]->pontuação, 
+               minutos, 
+               segundos, 
+               &users[cont]->dificuldade, 
+               users[cont]->nome);
+        cont++;
+    }
+
+    fclose(file1);
+
+    for (int i = 0; i < cont; i++) {
+        for (int j = i + 1; j < cont; j++) {
+            if (users[i]->pontuação < users[j]->pontuação) {
+                Infos *temp = users[i];
+                users[i] = users[j];
+                users[j] = temp;
+            }
+        }
+    }
+
+    for (int j = 0; j < cont; j++) {
+            printf("%d\n", users[j]->pontuação);
+            printf("%d : %d\n", *minutos,*segundos);
+            printf("%d\n", users[j]->dificuldade);
+            printf("%s\n", users[j]->nome);
+        }
+
+    return 0; 
+}
+
+
 
 int main(){
 
     //wasd
     //colocar jogadas
-    
+
     int tempo;
     int minutos;
     int segundos;
+    int moreThanOne = 0;
     float ranking = 1;
 
-    Infos *user;
-    user = (Infos *)malloc(sizeof(Infos) * numMaxPlayers);
+    //Infos *user;
+    //user = (Infos *)malloc(sizeof(Infos));
 
-    menu();
-    clean();
-    player(user); 
-    time_t inicio = time(NULL); 
-    game(user);
-    time_t fim = time(NULL);
-    tempo = fim-inicio;
-    formatTime(&tempo,&segundos,&minutos);
-    points(user,&minutos);
-    
-    /***********************************************************************ADIÇÃO DO JOGADOR ATUAL*****************************************************************************************/
+    Infos **users;
+    users = (Infos **)malloc(sizeof(Infos *) * numMaxPlayers);
 
-    addPlayer(&ranking,&minutos,&segundos,user);
+    // Aloca memória para cada elemento de users
+    for (int i = 0; i < numMaxPlayers; i++) {
+        users[i] = (Infos *)malloc(sizeof(Infos));
+    }
 
-    /************************************************************LEITURA DO ARQUIVO PARA STRUCT LOCAL E ORDENAÇÃO***************************************************************************/
+    //menu();
+    //clean();
+    //player(user); 
+    //time_t inicio = time(NULL); 
+    //game(user);
+    //time_t fim = time(NULL);
+    //tempo = fim-inicio;
+    //formatTime(&tempo,&segundos,&minutos);
+    //points(user,&minutos);
 
+    /************************ADIÇÃO DO JOGADOR ATUAL******************************/
 
+    //addPlayer(&minutos,&segundos,user);
 
-    /****************************************************************************ATUALIZAR ARQUIVO******************************************************************************************/
+    /*********************LEITURA DO ARQUIVO PARA STRUCT LOCAL E ORDENAÇÃO**************************/
 
+    orderRanking(&ranking,&minutos,&segundos,users);
 
+    /*************************ATUALIZAR ARQUIVO*******************************/
 
-    free(user);
+    //free(user);
+    for (int i = 0; i < numMaxPlayers; i++) {
+        free(users[i]);
+    }
+    free(users);
 
     return 0;
 
