@@ -444,6 +444,9 @@ int orderRanking(float *ranking, int *minutos, int *segundos, Infos **users) {
 
     for (int j = 0; j < cont; j++) {
             printf("%d\n", users[j]->pontuação);
+            printf("%d : %d\n", *minutos,*segundos);
+            printf("%d\n", users[j]->dificuldade);
+            printf("%s\n", users[j]->nome);
         }
 
     return 0; 
