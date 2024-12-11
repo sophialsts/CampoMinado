@@ -409,9 +409,8 @@ int addPlayer(int *minutos, int *segundos, Infos *user){
 
 }
 
-int orderRanking(float *ranking, int *minutos, int *segundos, Infos **users) {
+int orderRanking(int *minutos, int *segundos, Infos *users[]) {
     FILE *file1 = fopen("ranking.txt", "r");
-
     if (file1 == NULL) {
         perror("Erro ao abrir arquivo.");
         return 1;
@@ -420,12 +419,21 @@ int orderRanking(float *ranking, int *minutos, int *segundos, Infos **users) {
     char linha[100];
     int cont = 0;
 
+    fgets(linha, sizeof(linha), file1);
+
     while (fgets(linha, sizeof(linha), file1) != NULL) {
-        sscanf(linha, "%d %d:%d %d %[^\n]", 
-               &users[cont]->pontuação, 
-               minutos, 
-               segundos, 
-               &users[cont]->dificuldade, 
+        users[cont] = (Infos *)malloc(sizeof(Infos));
+        if (users[cont] == NULL) {
+            perror("Erro ao alocar memória.");
+            fclose(file1);
+            return 1;
+        }
+
+        sscanf(linha, "%d %d:%d %d %[^\n]",
+               &users[cont]->pontuação,
+               &minutos[cont],
+               &segundos[cont],
+               &users[cont]->dificuldade,
                users[cont]->nome);
         cont++;
     }
@@ -443,13 +451,15 @@ int orderRanking(float *ranking, int *minutos, int *segundos, Infos **users) {
     }
 
     for (int j = 0; j < cont; j++) {
-            printf("%d\n", users[j]->pontuação);
-            printf("%d : %d\n", *minutos,*segundos);
-            printf("%d\n", users[j]->dificuldade);
-            printf("%s\n", users[j]->nome);
-        }
+        printf("%d %02d:%02d %d %s\n",
+               users[j]->pontuação,
+               minutos[j],
+               segundos[j],
+               users[j]->dificuldade,
+               users[j]->nome);
+    }
 
-    return 0; 
+    return 0;
 }
 
 
@@ -460,21 +470,15 @@ int main(){
     //colocar jogadas
 
     int tempo;
-    int minutos;
-    int segundos;
+    int minutos[numMaxPlayers] = {0};
+    int segundos[numMaxPlayers] = {0};
     int moreThanOne = 0;
     float ranking = 1;
 
     //Infos *user;
     //user = (Infos *)malloc(sizeof(Infos));
 
-    Infos **users;
-    users = (Infos **)malloc(sizeof(Infos *) * numMaxPlayers);
-
-    // Aloca memória para cada elemento de users
-    for (int i = 0; i < numMaxPlayers; i++) {
-        users[i] = (Infos *)malloc(sizeof(Infos));
-    }
+    Infos *users[numMaxPlayers] = {0};
 
     //menu();
     //clean();
@@ -492,15 +496,17 @@ int main(){
 
     /*********************LEITURA DO ARQUIVO PARA STRUCT LOCAL E ORDENAÇÃO**************************/
 
-    orderRanking(&ranking,&minutos,&segundos,users);
+    orderRanking(&minutos,&segundos,users);
 
     /*************************ATUALIZAR ARQUIVO*******************************/
 
-    //free(user);
     for (int i = 0; i < numMaxPlayers; i++) {
-        free(users[i]);
+        if (users[i] != NULL) {
+            free(users[i]);
+        }
     }
-    free(users);
+
+    //free(user);
 
     return 0;
 
