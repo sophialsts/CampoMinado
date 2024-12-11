@@ -323,7 +323,6 @@ void game(Infos *user){
             printf("                                                              V O C Ê     E N C E R R O U     O     J O G O!\n" RESET);
             campoRevelado();
             sleep(7);
-            clean();
             printf("\n\n\n\n\n\n\n\n");
             printf("                                                                     ⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤\n");
             printf(VERDE"                                                                    ⎰                                  ⎱\n" );
