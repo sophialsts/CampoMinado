@@ -14,8 +14,6 @@
 #define tamCampo 7
 #define numMaxPlayers 20
 
-// ponteiro para armazenar quantidade de casas que o jogador conseguiu revelar
-
 enum casas {Vazio = 0, umaProx = 1, duasProx = 2, tresProx = 3, quatroProx = 4, naoRevelado = 5, Bomba = 6};
 int lose = 1;
 int revelados[tamCampo][tamCampo];
@@ -203,7 +201,8 @@ void campoRevelado(){
                 }
             }
         }
-
+    printf(AZUL "\n                                                                   ————————————————" RESET);
+    for(int i=0;i<qLinhas;i++) printf(AZUL "—" RESET);
 }
 
 void prtMatriz(){
@@ -325,6 +324,8 @@ void game(Infos *user){
             sleep(7);
             clean();
             printf("\n\n\n\n\n\n\n\n");
+            clean();
+            printf("\n\n\n\n\n\n\n\n");
             printf("                                                                     ⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤\n");
             printf(VERDE"                                                                    ⎰                                  ⎱\n" );
             printf("                                                                    ⟪  V   I    C    T    O    R    Y ⟫\n" );
@@ -395,7 +396,7 @@ void formatTime(int *time, int *seg, int *min){
 
 }
 
-int addPlayer(int *minutos[], int *segundos[], Infos *user){
+int addPlayer(int *ranking, int *minutos, int *segundos, Infos *user){
 
     FILE *file = fopen("ranking.txt", "a"); //se existir ele deleta e cria novo vazio || sobreescreve arquivo
 
@@ -404,7 +405,7 @@ int addPlayer(int *minutos[], int *segundos[], Infos *user){
         return 1;
     }
 
-    fprintf(file, "|         |    %d    | %d:%d  |      %d      | %s ",user->pontuação,*minutos,*segundos,user->dificuldade,user->nome);
+    fprintf(file, "|   %d    |     %d     |    %d:%d   |      %d      | %s ",*ranking, user->pontuação,*minutos,*segundos,user->dificuldade,user->nome);
     fclose(file);
 
 }
@@ -463,7 +464,7 @@ int orderRanking(int *minutos, int *segundos, Infos *users[]) {
     return cont;
 }
 
-int rewritingRanking(int *ranking[],int *minutos[], int *segundos[], Infos *users[]){
+int rewritingRanking(int *ranking,int *minutos, int *segundos, Infos *users[]){
 
     FILE *file2 = fopen("ranking.txt", "w");
 
@@ -475,7 +476,7 @@ int rewritingRanking(int *ranking[],int *minutos[], int *segundos[], Infos *user
         return 1;
     }
 
-    fprintf(file2, "| Ranking |  Pontuação | Tempo | Dificuldade | Nome Completo \n");
+    fprintf(file2, "| Ranking |  Pontuação |    Tempo   |  Dificuldade | Nome Completo \n");
 
     while (fgets(linha, sizeof(linha), file2) != NULL) {
         users[cont] = (Infos *)malloc(sizeof(Infos));
@@ -485,8 +486,8 @@ int rewritingRanking(int *ranking[],int *minutos[], int *segundos[], Infos *user
             return 1;
         }
 
-        fprintf(file2, "|      |    %d    | %02d:%02d  |      %d      | %s ",users[cont]->pontuação,*minutos,*segundos,users[cont]->dificuldade,users[cont]->nome);
-        
+        fprintf(file2, "|    %d   |     %d     | %02d:%02d  |      %d      | %s \n" ,ranking[cont],users[cont]->pontuação,minutos[cont],segundos[cont],users[cont]->dificuldade,users[cont]->nome);
+
         cont++;
     }
 
@@ -508,41 +509,45 @@ int main(){
     int moreThanOne = 0;
     int ranking[numMaxPlayers] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
 
-    //Infos *user;
-    //user = (Infos *)malloc(sizeof(Infos));
+    Infos *user;
+    user = (Infos *)malloc(sizeof(Infos));
 
     Infos *users[numMaxPlayers] = {0};
 
-    //menu();
-    //clean();
-    //player(user); 
-    //time_t inicio = time(NULL); 
-    //game(user);
-    //time_t fim = time(NULL);
-    //tempo = fim-inicio;
-    //formatTime(&tempo,&segundos,&minutos);
-    //points(user,&minutos);
+    menu();
+    clean();
+    player(user); 
+    time_t inicio = time(NULL); 
+    game(user);
+    time_t fim = time(NULL);
+    tempo = fim-inicio;
+    formatTime(&tempo,segundos,minutos);
+    points(user,minutos);
 
     /*************************************ADIÇÃO DO JOGADOR ATUAL***********************************/
 
-    //addPlayer(&minutos,&segundos,user);
+    addPlayer(ranking,minutos,segundos,user); //tá funcionando
 
     /*********************LEITURA DO ARQUIVO PARA STRUCT LOCAL E ORDENAÇÃO**************************/
 
-    quantPlayers = orderRanking(minutos,segundos,users);
+    quantPlayers = orderRanking(minutos,segundos,users); 
 
     /****************************************ATUALIZAR ARQUIVO**************************************/
 
-    if(quantPlayers > 1) printf("é");//rewritingRanking(ranking,minutos,segundos,users);
+    if(quantPlayers > 1) {
+        rewritingRanking(ranking,minutos,segundos,users);
+        printf("tá funcionando");
+        }
 
     /***********************************************************************************************/
+
     for (int i = 0; i < numMaxPlayers; i++) {
         if (users[i] != NULL) {
             free(users[i]);
         }
     }
 
-    //free(user);
+    free(user);
 
     return 0;
 
