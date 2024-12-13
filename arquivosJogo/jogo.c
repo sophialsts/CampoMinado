@@ -131,7 +131,7 @@ int plantaBomba(Infos *user){
             break;
     }
 
-    while(quantBombT < tamCampo-2){
+    while(quantBombT < qBombVaria){
 
         do{
             linBomb = ((rand() % tamCampo)); //antes tava mod 5 + 1, o que poderia gerar índice fora da matriz
@@ -260,7 +260,6 @@ int win(int limitaBomba){
 
 void game(Infos *user){
 
-
     int linha, coluna;
 
     int bombDefinidas = plantaBomba(user);
@@ -286,6 +285,9 @@ void game(Infos *user){
             }
         }
         while(!verificaCoordenadas(linha,coluna) || revelados[linha][coluna] != naoRevelado);
+
+        printf(MAGENTA "\n                                                             Você selecionou a coordenada de linha %d e coluna %d\n" RESET, linha,coluna);
+        sleep(1);
 
         switch(M[linha][coluna]){
             case Bomba:
@@ -317,15 +319,15 @@ void game(Infos *user){
         if(win(bombDefinidas)) {
             lose = 0;
             clean();
-            printf("\n\n\n\n\n\n\n\n\n\n\n\n\n");
+            printf("\n\n\n\n\n");
             printf(VERDE "                                                                           P A R A B É N S !\n");
             printf("                                                              V O C Ê     E N C E R R O U     O     J O G O!\n" RESET);
             campoRevelado();
             sleep(7);
             clean();
-            printf("\n\n\n\n\n\n\n\n\n\n\n\n\n");
+            printf("\n\n\n\n\n");
             clean();
-            printf("\n\n\n\n\n\n\n\n\n\n\n\n\n");
+            printf("\n\n\n\n\n\n\n\n\n\n\n\n");
             printf("                                                                     ⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤\n");
             printf(VERDE"                                                                    ⎰                                  ⎱\n" );
             printf("                                                                    ⟪  V   I    C    T    O    R    Y ⟫\n" );
@@ -407,7 +409,7 @@ int addPlayer(int *ranking, int *minutos, int *segundos, Infos *user){
         return 1;
     }
 
-    fprintf(file, "\n   %d         %d          %02d:%02d         %d        %s",*ranking, user->pontuação,*minutos,*segundos,user->dificuldade,user->nome);
+    fprintf(file, "\n     %d         %d         %02d:%02d          %d         %s",*ranking, user->pontuação,*minutos,*segundos,user->dificuldade,user->nome);
     fclose(file);
                    
 }
@@ -425,9 +427,9 @@ int orderRanking(int *minutos, int *segundos, Infos *users[]) {
     char linha[100];
     int cont = 0;
 
-    fgets(linha, sizeof(linha), file1); //pula o cabeçalho
+        fgets(linha, sizeof(linha), file1); //pula o cabeçalho
 
-    while (fgets(linha, sizeof(linha), file1) != NULL) {
+        while (fgets(linha, sizeof(linha), file1) != NULL) {
         users[cont] = (Infos *)malloc(sizeof(Infos));
 
         if (users[cont] == NULL) {
@@ -436,16 +438,16 @@ int orderRanking(int *minutos, int *segundos, Infos *users[]) {
             return 1;
         }
 
-        sscanf(linha, "   %d         %d          %02d:%02d         %d        %[^\n]",
-               &ignora,
-               &users[cont]->pontuação,
-               &minutos[cont],
-               &segundos[cont],
-               &users[cont]->dificuldade,
-               users[cont]->nome);
+        sscanf(linha, "     %d         %d         %02d:%02d          %d         %[^\n]",
+            &ignora,
+            &users[cont]->pontuação,
+            &minutos[cont],
+            &segundos[cont],
+            &users[cont]->dificuldade,
+            users[cont]->nome);
 
-        cont++;
-    }
+            cont++;
+        }
 
     if(cont > 1){
         for (int i = 0; i < cont; i++) {
@@ -496,9 +498,15 @@ int rewritingRanking(int *ranking,int *minutos, int *segundos, Infos *users[], i
             return 1;
         }
 
-        //fprintf(stdout, "porque não funciona porraaaa");
+        printf("     %d         %d         %02d:%02d          %d         %s\n" ,
+        ranking[i],
+        users[i]->pontuação,
+        minutos[i],
+        segundos[i],
+        users[i]->dificuldade,
+        users[i]->nome);
 
-        fprintf(file2, "     %d         %d          %02d:%02d         %d        %s\n" ,
+        fprintf(file2,"     %d         %d         %02d:%02d          %d         %s\n" ,
         ranking[i],
         users[i]->pontuação,
         minutos[i],
@@ -507,7 +515,7 @@ int rewritingRanking(int *ranking,int *minutos, int *segundos, Infos *users[], i
         users[i]->nome);
 
         i++;
-    }
+    };
 
     fclose(file2);
 
@@ -516,7 +524,6 @@ int rewritingRanking(int *ranking,int *minutos, int *segundos, Infos *users[], i
 int main(){
 
     //wasd
-    //colocar jogadas
 
     int tempo;
     int quantPlayers = 0;
@@ -530,19 +537,19 @@ int main(){
 
     Infos *users[numMaxPlayers] = {0};
 
-    //menu();
-    //clean();
-    //player(user); 
-    //time_t inicio = time(NULL); 
-    //game(user);
-    //time_t fim = time(NULL);
-    //tempo = fim-inicio;
-    //formatTime(&tempo,segundos,minutos);
-    //points(user,minutos);
+    menu();
+    clean();
+    player(user); 
+    time_t inicio = time(NULL); 
+    game(user);
+    time_t fim = time(NULL);
+    tempo = fim-inicio;
+    formatTime(&tempo,segundos,minutos);
+    points(user,minutos);
 
     /*************************************ADIÇÃO DO JOGADOR ATUAL***********************************/
 
-    //addPlayer(ranking,minutos,segundos,user); //tá funcionando
+    addPlayer(ranking,minutos,segundos,user); //tá funcionando
 
     /*********************LEITURA DO ARQUIVO PARA STRUCT LOCAL E ORDENAÇÃO**************************/
 

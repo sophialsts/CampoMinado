@@ -1,7 +1,6 @@
-| Ranking |  Pontuação |    Tempo   |  Dificuldade | Nome Completo 
-   1         3300          00:47         2        Sophia Lima
-   1         4300          00:34         2        Letícia Costa
-   1         3800          00:47         2        Sophia Lima
-   1         5200          00:47         2        Sophia Lima
-   1         2800          00:47         2        Sophia Lima
-   1         4000          00:47         2        Sophia Lima
+| Ranking |  Pontuação |    Tempo   |  Dificuldade | Nome Completo
+     1         3500         00:27          3         Sophia Lima
+     2         3300         00:31          2         Sophia Lima
+     3         3300         01:14          3         José Teste 
+     4         3200         00:00          3         Sophia Silva
+     5         0         01:45          0         
