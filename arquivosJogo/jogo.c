@@ -295,7 +295,7 @@ void game(Infos *user){
                 printf(MAGENTA "\n\n                                                                Você selecionou um local com bomba :c\n" RESET);
                 sleep(7);
                 clean();
-                printf("\n\n\n\n\n\n\n\n");
+                printf("\n\n\n\n\n\n\n\n\n\n\n\n\n");
                 printf("                                                                     ⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤\n");
                 printf(VERMELHO"                                                                    ⎰                                  ⎱\n" );
                 printf("                                                                    ⟪  D    E     F     E     A     T  ⟫\n" );
@@ -317,15 +317,15 @@ void game(Infos *user){
         if(win(bombDefinidas)) {
             lose = 0;
             clean();
-            printf("\n\n\n\n\n\n\n\n");
+            printf("\n\n\n\n\n\n\n\n\n\n\n\n\n");
             printf(VERDE "                                                                           P A R A B É N S !\n");
             printf("                                                              V O C Ê     E N C E R R O U     O     J O G O!\n" RESET);
             campoRevelado();
             sleep(7);
             clean();
-            printf("\n\n\n\n\n\n\n\n");
+            printf("\n\n\n\n\n\n\n\n\n\n\n\n\n");
             clean();
-            printf("\n\n\n\n\n\n\n\n");
+            printf("\n\n\n\n\n\n\n\n\n\n\n\n\n");
             printf("                                                                     ⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤\n");
             printf(VERDE"                                                                    ⎰                                  ⎱\n" );
             printf("                                                                    ⟪  V   I    C    T    O    R    Y ⟫\n" );
@@ -347,6 +347,8 @@ void player(Infos *user){
     char sobrenome[20];
     char nomeCompleto[50];
     int nível;
+
+    printf("\n\n\n\n\n\n\n\n\n");
 
     printf(MAGENTA "                                                                         Digite seu 1º nome:" RESET);
     gets(nome);
@@ -405,9 +407,9 @@ int addPlayer(int *ranking, int *minutos, int *segundos, Infos *user){
         return 1;
     }
 
-    fprintf(file, "\n|   %d    |     %d     |    %d:%d   |      %d       | %s ",*ranking, user->pontuação,*minutos,*segundos,user->dificuldade,user->nome);
+    fprintf(file, "\n|   %d    |     %d     |    %02d:%02d   |      %d       | %s ",*ranking, user->pontuação,*minutos,*segundos,user->dificuldade,user->nome);
     fclose(file);
-
+                   
 }
 
 int orderRanking(int *minutos, int *segundos, Infos *users[]) {
@@ -418,14 +420,15 @@ int orderRanking(int *minutos, int *segundos, Infos *users[]) {
         return 1;
     }
 
-    int ignora;
+    int ignora = 0;
     char linha[100];
     int cont = 0;
 
-    fgets(linha, sizeof(linha), file1);
+    fgets(linha, sizeof(linha), file1); //pula o cabeçalho
 
     while (fgets(linha, sizeof(linha), file1) != NULL) {
         users[cont] = (Infos *)malloc(sizeof(Infos));
+
         if (users[cont] == NULL) {
             perror("Erro ao alocar memória.");
             fclose(file1);
@@ -442,20 +445,24 @@ int orderRanking(int *minutos, int *segundos, Infos *users[]) {
         cont++;
     }
 
+    printf("contador antes das trocas : %d\n\n", cont);
+
     fclose(file1);
 
-    for (int i = 0; i < cont; i++) {
-        for (int j = i + 1; j < cont; j++) {
-            if (users[i]->pontuação < users[j]->pontuação) {
-                Infos *temp = users[i];
-                users[i] = users[j];
-                users[j] = temp;
+    if(cont > 1){
+        for (int i = 0; i < cont; i++) {
+            for (int j = i + 1; j < cont; j++) {
+                if (users[i]->pontuação < users[j]->pontuação) {
+                    Infos *temp = users[i];
+                    users[i] = users[j];
+                    users[j] = temp;
+                }
             }
         }
     }
 
     for (int j = 0; j < cont; j++) {
-        printf("%d %d %02d:%02d %d %s\n",
+        printf("|   %d    |     %d     |    %02d:%02d   |      %d       | %s \n", 
                ignora,
                users[j]->pontuação,
                minutos[j],
@@ -467,6 +474,7 @@ int orderRanking(int *minutos, int *segundos, Infos *users[]) {
     return cont;
 }
 
+/*
 int rewritingRanking(int *ranking,int *minutos, int *segundos, Infos *users[]){
 
     FILE *file2 = fopen("ranking.txt", "w");
@@ -499,7 +507,7 @@ int rewritingRanking(int *ranking,int *minutos, int *segundos, Infos *users[]){
 
     return cont;
 
-}
+}*/
 
 int main(){
 
@@ -513,20 +521,20 @@ int main(){
     int moreThanOne = 0;
     int ranking[numMaxPlayers] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
 
-    //Infos *user;
-    //user = (Infos *)malloc(sizeof(Infos));
+    Infos *user;
+    user = (Infos *)malloc(sizeof(Infos));
 
     Infos *users[numMaxPlayers] = {0};
 
-    //menu();
-    //clean();
-    //player(user); 
-    //time_t inicio = time(NULL); 
-    //game(user);
-    //time_t fim = time(NULL);
-    //tempo = fim-inicio;
-    //formatTime(&tempo,segundos,minutos);
-    //points(user,minutos);
+    /*menu();
+    clean();
+    player(user); 
+    time_t inicio = time(NULL); 
+    game(user);
+    time_t fim = time(NULL);
+    tempo = fim-inicio;
+    formatTime(&tempo,segundos,minutos);
+    points(user,minutos);*/
 
     /*************************************ADIÇÃO DO JOGADOR ATUAL***********************************/
 
@@ -534,26 +542,28 @@ int main(){
 
     /*********************LEITURA DO ARQUIVO PARA STRUCT LOCAL E ORDENAÇÃO**************************/
 
-    //clean();
-    //sleep(3);
+    clean();
+    sleep(3);
+    
     quantPlayers = orderRanking(minutos,segundos,users); //TA FUNCIONANDO AAAAAAAAAAA
+    printf("\ncontador final : %d", quantPlayers);
 
     /****************************************ATUALIZAR ARQUIVO**************************************/
 
-    /*(quantPlayers > 1) {
+    /*if (quantPlayers > 1) {
         rewritingRanking(ranking,minutos,segundos,users);
         printf("tá funcionando"); //ele entra aqui certo
         }*/
 
     /***********************************************************************************************/
 
-    /*for (int i = 0; i < numMaxPlayers; i++) {
+    for (int i = 0; i < numMaxPlayers; i++) {
         if (users[i] != NULL) {
             free(users[i]);
         }
     }
 
-    free(user);*/
+    free(user);
 
     return 0;
 

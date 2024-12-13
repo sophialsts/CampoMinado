@@ -1,3 +1,2 @@
 | Ranking |  Pontuação |    Tempo   |  Dificuldade | Nome Completo 
-2 4000 01:30 1 Letícia Lima
-1 5000 02:30 2 Sophia Lima
+|   1    |     3100     |    01:15   |      2       | Sophia Lima 
