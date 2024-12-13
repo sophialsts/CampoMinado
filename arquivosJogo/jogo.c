@@ -442,6 +442,9 @@ int orderRanking(int *minutos, int *segundos, Infos *users[]) {
                &segundos[cont],
                &users[cont]->dificuldade,
                users[cont]->nome);
+
+        printf("%d", users[cont]->pontuação);
+
         cont++;
     }
 
@@ -461,7 +464,7 @@ int orderRanking(int *minutos, int *segundos, Infos *users[]) {
         }
     }
 
-    for (int j = 0; j < cont; j++) {
+    /*for (int j = 0; j < cont; j++) {
         printf("|   %d    |     %d     |    %02d:%02d   |      %d       | %s \n", 
                ignora,
                users[j]->pontuação,
@@ -469,7 +472,7 @@ int orderRanking(int *minutos, int *segundos, Infos *users[]) {
                segundos[j],
                users[j]->dificuldade,
                users[j]->nome);
-    }
+    }*/
 
     return cont;
 }
@@ -521,8 +524,8 @@ int main(){
     int moreThanOne = 0;
     int ranking[numMaxPlayers] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
 
-    Infos *user;
-    user = (Infos *)malloc(sizeof(Infos));
+    //Infos *user;
+    //user = (Infos *)malloc(sizeof(Infos));
 
     Infos *users[numMaxPlayers] = {0};
 
@@ -563,7 +566,7 @@ int main(){
         }
     }
 
-    free(user);
+    //free(user);
 
     return 0;
 
