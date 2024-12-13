@@ -405,7 +405,7 @@ int addPlayer(int *ranking, int *minutos, int *segundos, Infos *user){
         return 1;
     }
 
-    fprintf(file, "|   %d    |     %d     |    %d:%d   |      %d      | %s ",*ranking, user->pontuação,*minutos,*segundos,user->dificuldade,user->nome);
+    fprintf(file, "\n|   %d    |     %d     |    %d:%d   |      %d       | %s ",*ranking, user->pontuação,*minutos,*segundos,user->dificuldade,user->nome);
     fclose(file);
 
 }
@@ -418,6 +418,7 @@ int orderRanking(int *minutos, int *segundos, Infos *users[]) {
         return 1;
     }
 
+    int ignora;
     char linha[100];
     int cont = 0;
 
@@ -431,7 +432,8 @@ int orderRanking(int *minutos, int *segundos, Infos *users[]) {
             return 1;
         }
 
-        sscanf(linha, "%d %d:%d %d %[^\n]",
+        sscanf(linha, "%d %d %d:%d %d %[^\n]",
+               &ignora,
                &users[cont]->pontuação,
                &minutos[cont],
                &segundos[cont],
@@ -451,15 +453,16 @@ int orderRanking(int *minutos, int *segundos, Infos *users[]) {
             }
         }
     }
-/*
+
     for (int j = 0; j < cont; j++) {
-        printf("%d %02d:%02d %d %s\n",
+        printf("%d %d %02d:%02d %d %s\n",
+               ignora,
                users[j]->pontuação,
                minutos[j],
                segundos[j],
                users[j]->dificuldade,
                users[j]->nome);
-    }*/
+    }
 
     return cont;
 }
@@ -480,6 +483,7 @@ int rewritingRanking(int *ranking,int *minutos, int *segundos, Infos *users[]){
 
     while (fgets(linha, sizeof(linha), file2) != NULL) {
         users[cont] = (Infos *)malloc(sizeof(Infos));
+
         if (users[cont] == NULL) {
             perror("Erro ao alocar memória.");
             fclose(file2);
@@ -509,45 +513,47 @@ int main(){
     int moreThanOne = 0;
     int ranking[numMaxPlayers] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
 
-    Infos *user;
-    user = (Infos *)malloc(sizeof(Infos));
+    //Infos *user;
+    //user = (Infos *)malloc(sizeof(Infos));
 
     Infos *users[numMaxPlayers] = {0};
 
-    menu();
-    clean();
-    player(user); 
-    time_t inicio = time(NULL); 
-    game(user);
-    time_t fim = time(NULL);
-    tempo = fim-inicio;
-    formatTime(&tempo,segundos,minutos);
-    points(user,minutos);
+    //menu();
+    //clean();
+    //player(user); 
+    //time_t inicio = time(NULL); 
+    //game(user);
+    //time_t fim = time(NULL);
+    //tempo = fim-inicio;
+    //formatTime(&tempo,segundos,minutos);
+    //points(user,minutos);
 
     /*************************************ADIÇÃO DO JOGADOR ATUAL***********************************/
 
-    addPlayer(ranking,minutos,segundos,user); //tá funcionando
+    //addPlayer(ranking,minutos,segundos,user); //tá funcionando
 
     /*********************LEITURA DO ARQUIVO PARA STRUCT LOCAL E ORDENAÇÃO**************************/
 
-    quantPlayers = orderRanking(minutos,segundos,users); 
+    //clean();
+    //sleep(3);
+    quantPlayers = orderRanking(minutos,segundos,users); //TA FUNCIONANDO AAAAAAAAAAA
 
     /****************************************ATUALIZAR ARQUIVO**************************************/
 
-    if(quantPlayers > 1) {
+    /*(quantPlayers > 1) {
         rewritingRanking(ranking,minutos,segundos,users);
-        printf("tá funcionando");
-        }
+        printf("tá funcionando"); //ele entra aqui certo
+        }*/
 
     /***********************************************************************************************/
 
-    for (int i = 0; i < numMaxPlayers; i++) {
+    /*for (int i = 0; i < numMaxPlayers; i++) {
         if (users[i] != NULL) {
             free(users[i]);
         }
     }
 
-    free(user);
+    free(user);*/
 
     return 0;
 
