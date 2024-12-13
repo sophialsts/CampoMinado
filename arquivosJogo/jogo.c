@@ -409,7 +409,7 @@ int addPlayer(int *ranking, int *minutos, int *segundos, Infos *user){
         return 1;
     }
 
-    fprintf(file, "\n     %d         %d         %02d:%02d          %d         %s",*ranking, user->pontuação,*minutos,*segundos,user->dificuldade,user->nome);
+    fprintf(file, "     %d         %d         %02d:%02d          %d         %s\n",*ranking, user->pontuação,*minutos,*segundos,user->dificuldade,user->nome);
     fclose(file);
                    
 }
@@ -430,6 +430,7 @@ int orderRanking(int *minutos, int *segundos, Infos *users[]) {
         fgets(linha, sizeof(linha), file1); //pula o cabeçalho
 
         while (fgets(linha, sizeof(linha), file1) != NULL) {
+        if (strlen(linha) <= 1) continue;
         users[cont] = (Infos *)malloc(sizeof(Infos));
 
         if (users[cont] == NULL) {
