@@ -156,7 +156,7 @@ void revela(int linha, int coluna, Infos *user){ //chamada recursiva
 
     revelados[linha][coluna] = M[linha][coluna];
 
-    user->pontuação += 50;
+    user->pontuação += 25;
 
     if(M[linha][coluna] == Vazio){
         for (int i = linha - 1; i <= linha + 1; i++) {
@@ -277,11 +277,11 @@ void game(Infos *user){
             printf("                                                                     Digite a coluna que deseja:" RESET);
             scanf("%d", &coluna);
             if(!verificaCoordenadas(linha,coluna)) {
-                printf(MAGENTA "                                                                       Digite coordenadas válidas\n" RESET);
+                printf(MAGENTA "                                                                     Digite coordenadas válidas\n" RESET);
                 sleep(1);
                 }
             else if(revelados[linha][coluna] != naoRevelado){
-                printf(MAGENTA "                                                                       Essa célula já foi selecionada.\n" RESET);
+                printf(MAGENTA "                                                                     Essa célula já foi selecionada.\n" RESET);
             }
         }
         while(!verificaCoordenadas(linha,coluna) || revelados[linha][coluna] != naoRevelado);
@@ -312,7 +312,7 @@ void game(Infos *user){
                 break;
             default:
                 revelados[linha][coluna] = M[linha][coluna];
-                user->pontuação += 50;
+                user->pontuação += 25;
                 break;
         }
 
@@ -369,7 +369,7 @@ void player(Infos *user){
 void points(Infos *user, int *minutes){
 
     int intervalos[5] = {1,2,3,4,5};
-    int pontuações[5] = {500,300,100,75,50};
+    int pontuações[5] = {300,200,100,75,50};
 
     if(!lose) user->pontuação += 500;
 
@@ -377,17 +377,19 @@ void points(Infos *user, int *minutes){
         case 1:
             break;
         case 2:
-            user->pontuação +=100;
+            user->pontuação +=400;
             break;
         case 3:
-            user->pontuação += 300;
+            user->pontuação += 700;
             break;
     }
 
-    for(int i = 0; i < 6 ; i++){
-        if(*minutes < intervalos[i]) {
-            user->pontuação += pontuações[i]; //erro ta aq, ta somando tds
-            break;
+    if(user->dificuldade > 2){ //bônus de tempo só vai pra dificuldade 3
+        for(int i = 0; i < 6 ; i++){
+            if(*minutes < intervalos[i]) {
+                user->pontuação += pontuações[i]; 
+                break;
+            }
         }
     }
 
@@ -430,24 +432,24 @@ int orderRanking(int *minutos, int *segundos, Infos *users[]) {
         fgets(linha, sizeof(linha), file1); //pula o cabeçalho
 
         while (fgets(linha, sizeof(linha), file1) != NULL) {
-        if (strlen(linha) <= 1) continue;
-        users[cont] = (Infos *)malloc(sizeof(Infos));
+            if (strlen(linha) <= 1) continue;
+            users[cont] = (Infos *)malloc(sizeof(Infos));
 
-        if (users[cont] == NULL) {
-            perror("Erro ao alocar memória.");
-            fclose(file1);
-            return 1;
-        }
+            if (users[cont] == NULL) {
+                perror("Erro ao alocar memória.");
+                fclose(file1);
+                return 1;
+            }
 
-        sscanf(linha, "     %d         %d         %02d:%02d          %d         %[^\n]",
-            &ignora,
-            &users[cont]->pontuação,
-            &minutos[cont],
-            &segundos[cont],
-            &users[cont]->dificuldade,
-            users[cont]->nome);
+            sscanf(linha, "     %d         %d         %02d:%02d          %d         %[^\n]",
+                &ignora,
+                &users[cont]->pontuação,
+                &minutos[cont],
+                &segundos[cont],
+                &users[cont]->dificuldade,
+                users[cont]->nome);
 
-            cont++;
+                cont++;
         }
 
     if(cont > 1){
@@ -455,21 +457,17 @@ int orderRanking(int *minutos, int *segundos, Infos *users[]) {
             for (int j = i + 1; j < cont; j++) {
                 if (users[i]->pontuação < users[j]->pontuação) {
                     Infos *temp = users[i];
+                    int aux1 = minutos[i];
+                    int aux2 = segundos[i];
+                    minutos[i] = minutos[j];
+                    segundos[i] = segundos[j];
                     users[i] = users[j];
                     users[j] = temp;
+                    minutos[j] = aux1;
+                    segundos[j] = aux2;
                 }
             }
         }
-
-        /*for (int j = 0; j < cont; j++) {
-        printf("   %d         %d          %02d:%02d         %d        %s \n", 
-               ignora,
-               users[j]->pontuação,
-               minutos[j],
-               segundos[j],
-               users[j]->dificuldade,
-               users[j]->nome);
-        }*/
     }
 
         fclose(file1);
@@ -492,12 +490,6 @@ int rewritingRanking(int *ranking,int *minutos, int *segundos, Infos *users[], i
     fprintf(file2, "| Ranking |  Pontuação |    Tempo   |  Dificuldade | Nome Completo\n"); //cabeçalho
 
     while (i < cont) {
-
-        if (users[i] == NULL) {
-            perror("Erro ao alocar memória.");
-            fclose(file2);
-            return 1;
-        }
 
         printf("     %d         %d         %02d:%02d          %d         %s\n" ,
         ranking[i],
