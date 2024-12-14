@@ -272,21 +272,32 @@ void game(Infos *user){
         prtMatriz();
 
         do{
-            printf(MAGENTA "\n\n                                                                     Digite a linha que deseja:" );
-            scanf("%d", &linha);
+            do{
+                printf(MAGENTA "\n\n                                                                     Digite a linha que deseja:" );
+                scanf("%d", &linha);
+                if(linha < 0 || linha > tamCampo) {
+                printf(MAGENTA "                                                                     Digite uma linha válida.\n" RESET);
+                clean();
+                prtMatriz();
+                }
+            }
+            while(linha < 0 || linha > tamCampo);
+
             printf("                                                                     Digite a coluna que deseja:" RESET);
             scanf("%d", &coluna);
             if(!verificaCoordenadas(linha,coluna)) {
-                printf(MAGENTA "                                                                     Digite coordenadas válidas\n" RESET);
+                printf(MAGENTA "                                                                     Digite uma coluna válida.\n" RESET);
                 sleep(1);
                 }
             else if(revelados[linha][coluna] != naoRevelado){
                 printf(MAGENTA "                                                                     Essa célula já foi selecionada.\n" RESET);
+                clean();
+                prtMatriz();
             }
         }
         while(!verificaCoordenadas(linha,coluna) || revelados[linha][coluna] != naoRevelado);
 
-        printf(MAGENTA "\n                                                             Você selecionou a coordenada de linha %d e coluna %d\n" RESET, linha,coluna);
+        printf(MAGENTA "\n                                                           Você selecionou a coordenada de linha: %d e coluna: %d\n" RESET, linha,coluna);
         sleep(1);
 
         switch(M[linha][coluna]){
@@ -468,6 +479,25 @@ int orderRanking(int *minutos, int *segundos, Infos *users[]) {
                 }
             }
         }
+
+        for (int i = 0; i < cont; i++) {
+            for (int j = i + 1; j < cont; j++) {
+                if (users[i]->pontuação == users[j]->pontuação) {
+                    if(minutos[i] > minutos[j]){
+                        int aux = minutos[i];
+                        minutos[i] = minutos[j];
+                        minutos[j] = aux;
+                    }
+                    else if(minutos[i] == minutos[j]){
+                        if(segundos[i] > segundos[j]){
+                            int auxx = segundos[i];
+                            segundos[i] = segundos[j];
+                            segundos[j] = auxx;
+                        }
+                    }
+                }
+            }
+        }
     }
 
         fclose(file1);
@@ -529,7 +559,6 @@ int main(){
     user = (Infos *)malloc(sizeof(Infos));
 
     Infos *users[numMaxPlayers] = {0};
-
     menu();
     clean();
     player(user); 
@@ -538,7 +567,7 @@ int main(){
     time_t fim = time(NULL);
     tempo = fim-inicio;
     formatTime(&tempo,segundos,minutos);
-    points(user,minutos);
+    points(user,minutos);*/
 
     /*************************************ADIÇÃO DO JOGADOR ATUAL***********************************/
 
