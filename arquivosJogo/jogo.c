@@ -4,6 +4,8 @@
 #include <unistd.h>
 #include <time.h>
 #define RESET "\033[0m"
+#define NEGRITO "\033[1m"
+#define ITALICO "\033[3m"
 #define CIANO "\033[36m"
 #define PRETO "\033[30m"
 #define AZUL "\033[34m"
@@ -11,6 +13,10 @@
 #define VERDE "\033[32m"
 #define MAGENTA "\033[35m"
 #define VERMELHO "\033[31m"
+#define fundoBranco "\033[47m"
+#define fundoVerde "\033[42m"
+#define fundoVermelho "\033[41m"
+#define fundoMagenta "\033[45m"
 #define tamCampo 7
 #define numMaxPlayers 20
 
@@ -37,17 +43,21 @@ void menu(){
 
     char start;
 
-    printf("\n");
-    printf(MAGENTA "                                                         B E M     V I N D O      A O     C A M P O     M I N A D O\n" RESET);
-    printf(PRETO "                                                         ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\n" RESET);
-    printf("                                                                                         _❈ \n");
+    printf("\n\n\n\n\n\n\n");
+    printf("                                                          ");
+    printf(MAGENTA fundoBranco "B E M     V I N D O      A O     C A M P O     M I N A D O !" RESET);
+    printf("\n\n");
+    printf("                                                                                         ");
+    printf(VERMELHO "_❈ \n" RESET);
     printf("                                                                                        /\n");
-    printf("                                                                                   ✩✩✩✩✩✩\n");
+    printf("                                                                                   ");
+    printf(PRETO "✩✩✩✩✩✩\n");
     printf("                                                                                 ✩✩✩✩✩✩✩✩✩\n");
     printf("                                                                                ✩✩✩✩✩✩✩✩✩✩✩\n");
     printf("                                                                                 ✩✩✩✩✩✩✩✩✩\n");
-    printf("                                                                                  ✩✩✩✩✩✩✩\n\n");
-    printf(MAGENTA"                                                                         Clique enter para começar!" RESET);
+    printf("                                                                                  ✩✩✩✩✩✩✩\n\n" RESET);
+    printf("                                                                         ");
+    printf(MAGENTA fundoBranco "Clique enter para começar!" RESET);
 
     scanf("%c", &start);
     if(start == '\n') return;
@@ -268,52 +278,77 @@ void game(Infos *user){
 
     while(lose == 1 && win(bombDefinidas) == 0){
 
-        printf("\n\n\n\n\n");
+        printf("\n\n\n\n\n\n");
         prtMatriz();
 
         do{
             do{
-                printf(MAGENTA "\n\n                                                                     Digite a linha que deseja:" );
+                printf(MAGENTA "\n\n                                                                      Digite a linha que deseja:" );
                 scanf("%d", &linha);
                 if(linha < 0 || linha > tamCampo) {
-                printf(MAGENTA "                                                                     Digite uma linha válida.\n" RESET);
+                printf("\n                                                                        ");
+                printf(fundoBranco VERMELHO "Digite uma linha válida!" RESET);
+                printf("\n");
+                sleep(1);
                 clean();
                 prtMatriz();
                 }
             }
             while(linha < 0 || linha > tamCampo);
 
-            printf("                                                                     Digite a coluna que deseja:" RESET);
+            printf("                                                                      Digite a coluna que deseja:" RESET);
             scanf("%d", &coluna);
             if(!verificaCoordenadas(linha,coluna)) {
-                printf(MAGENTA "                                                                     Digite uma coluna válida.\n" RESET);
+                printf("                                                                        ");
+                printf(VERMELHO fundoBranco "Digite uma coluna válida!" RESET);
+                printf("\n");
                 sleep(1);
+                clean();
+                prtMatriz();
                 }
             else if(revelados[linha][coluna] != naoRevelado){
-                printf(MAGENTA "                                                                     Essa célula já foi selecionada.\n" RESET);
+                printf("                                                                        ");
+                printf(VERMELHO fundoBranco "Essa célula já foi selecionada." RESET);
+                sleep(1);
                 clean();
+                printf("\n\n\n");
                 prtMatriz();
             }
         }
         while(!verificaCoordenadas(linha,coluna) || revelados[linha][coluna] != naoRevelado);
 
-        printf(MAGENTA "\n                                                           Você selecionou a coordenada de linha: %d e coluna: %d\n" RESET, linha,coluna);
+        printf("\n");
+        printf("                                                                      ");
+        printf("Você selecionou a coordenada:" RESET);
+        printf("\n");
+        printf("                                                                         ");
+        printf(fundoMagenta "Linha: %d | Coluna: %d" RESET, linha,coluna);
+        printf("\n");
         sleep(1);
 
         switch(M[linha][coluna]){
             case Bomba:
                 clean();
                 revelados[linha][coluna] = M[linha][coluna];
+                printf("\n\n\n\n");
                 prtMatriz();
                 printf(MAGENTA "\n\n                                                                Você selecionou um local com bomba :c\n" RESET);
                 sleep(7);
                 clean();
                 printf("\n\n\n\n\n\n\n\n\n\n\n\n\n");
-                printf("                                                                     ⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤\n");
-                printf(VERMELHO"                                                                    ⎰                                  ⎱\n" );
-                printf("                                                                    ⟪  D    E     F     E     A     T  ⟫\n" );
-                printf("                                                                    ⎱                                  ⎰\n" RESET);
-                printf("                                                                     ⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤\n" );
+                printf(PRETO "                                                                     ⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤\n" RESET);
+                printf("                                                                    ⎰ ");
+                printf(fundoVermelho"                                " RESET);
+                printf(" ⎱\n" RESET);
+                printf("                                                                    ⟪ ");
+                printf(fundoVermelho " D    E     F     E     A     T " RESET);
+                printf(" ⟫\n" );
+                printf("                                                                    ");
+                printf("⎱ ");
+                printf(fundoVermelho "                                " RESET);
+                printf(" ⎰\n");
+                printf("                                                                     ");
+                printf(PRETO "⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤\n" RESET);
                 sleep(3);
                 lose = 0;
                 clean();
@@ -330,21 +365,31 @@ void game(Infos *user){
         if(win(bombDefinidas)) {
             lose = 0;
             clean();
-            printf("\n\n\n\n\n");
-            printf(VERDE "                                                                           P A R A B É N S !\n");
-            printf("                                                              V O C Ê     E N C E R R O U     O     J O G O!\n" RESET);
+            printf("\n\n\n\n\n\n");
+            printf("                                                                         ");
+            printf(VERDE fundoBranco " P A R A B É N S ! " RESET);
+            printf("\n\n");
+            printf("                                                            ");
+            printf(VERDE fundoBranco " V O C Ê     E N C E R R O U     O     J O G O! " RESET);
+            printf("\n\n");
             campoRevelado();
             sleep(7);
             clean();
             printf("\n\n\n\n\n");
             clean();
             printf("\n\n\n\n\n\n\n\n\n\n\n\n");
-            printf("                                                                     ⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤\n");
-            printf(VERDE"                                                                    ⎰                                  ⎱\n" );
-            printf("                                                                    ⟪  V   I    C    T    O    R    Y ⟫\n" );
-            printf("                                                                    ⎱                                  ⎰\n" RESET);
-            printf("                                                                     ⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤\n");
-            sleep(3); 
+            printf(PRETO "                                                                     ⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤\n" RESET);
+            printf("                                                                    ⎰ ");
+            printf(fundoBranco"                               " RESET);
+            printf(" ⎱\n");
+            printf("                                                                    ⟪ ");
+            printf(VERDE fundoBranco" V   I    C    T    O    R   Y " RESET);
+            printf(" ⟫\n");
+            printf("                                                                    ⎱ ");
+            printf(fundoBranco "                               " RESET);
+            printf(" ⎰\n");
+            printf(PRETO "                                                                     ⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤\n" RESET);
+            sleep(7); 
             return;
         }
             clean();
@@ -363,10 +408,11 @@ void player(Infos *user){
 
     printf("\n\n\n\n\n\n\n\n\n");
 
-    printf(MAGENTA "                                                                         Digite seu 1º nome:" RESET);
-    gets(nome);
-    printf(MAGENTA "\n                                                                         Digite seu sobrenome:" RESET);
-    gets(sobrenome);
+    printf(MAGENTA "                                                                         Digite seu 1º nome: " RESET);
+    fgets(nome,sizeof(nome),stdin);
+    nome[strlen(nome)-1] = '\0';
+    printf(MAGENTA "\n                                                                         Digite seu sobrenome: " RESET);
+    fgets(sobrenome,sizeof(sobrenome),stdin);
 
     snprintf(user->nome, sizeof(nomeCompleto), "%s %s", nome, sobrenome);
 
@@ -380,7 +426,7 @@ void player(Infos *user){
 void points(Infos *user, int *minutes){
 
     int intervalos[5] = {1,2,3,4,5};
-    int pontuações[5] = {300,200,100,75,50};
+    int pontuações[5] = {300,200,80,50,25};
 
     if(!lose) user->pontuação += 500;
 
@@ -391,7 +437,7 @@ void points(Infos *user, int *minutes){
             user->pontuação +=400;
             break;
         case 3:
-            user->pontuação += 700;
+            user->pontuação += 550;
             break;
     }
 
@@ -422,7 +468,7 @@ int addPlayer(int *ranking, int *minutos, int *segundos, Infos *user){
         return 1;
     }
 
-    fprintf(file, "     %d         %d         %02d:%02d          %d         %s\n",*ranking, user->pontuação,*minutos,*segundos,user->dificuldade,user->nome);
+    fprintf(file, "\n     %d         %d         %02d:%02d          %d         %s",*ranking, user->pontuação,*minutos,*segundos,user->dificuldade,user->nome);
     fclose(file);
                    
 }
@@ -517,11 +563,11 @@ int rewritingRanking(int *ranking,int *minutos, int *segundos, Infos *users[], i
         return 1;
     }
 
-    fprintf(file2, "| Ranking |  Pontuação |    Tempo   |  Dificuldade | Nome Completo\n"); //cabeçalho
+    fprintf(file2 ,"| Ranking |  Pontuação |    Tempo   |  Dificuldade | Nome Completo" ); //cabeçalho
 
     while (i < cont) {
 
-        printf("     %d         %d         %02d:%02d          %d         %s\n" ,
+        printf("\n\n     %d         %d         %02d:%02d          %d         %s" ,
         ranking[i],
         users[i]->pontuação,
         minutos[i],
@@ -529,7 +575,7 @@ int rewritingRanking(int *ranking,int *minutos, int *segundos, Infos *users[], i
         users[i]->dificuldade,
         users[i]->nome);
 
-        fprintf(file2,"     %d         %d         %02d:%02d          %d         %s\n" ,
+        fprintf(file2,"\n\n     %d         %d         %02d:%02d          %d         %s" ,
         ranking[i],
         users[i]->pontuação,
         minutos[i],
@@ -538,15 +584,13 @@ int rewritingRanking(int *ranking,int *minutos, int *segundos, Infos *users[], i
         users[i]->nome);
 
         i++;
-    };
+    } 
 
     fclose(file2);
 
 }
 
 int main(){
-
-    //wasd
 
     int tempo;
     int quantPlayers = 0;
@@ -567,18 +611,18 @@ int main(){
     time_t fim = time(NULL);
     tempo = fim-inicio;
     formatTime(&tempo,segundos,minutos);
-    points(user,minutos);*/
+    points(user,minutos);
 
     /*************************************ADIÇÃO DO JOGADOR ATUAL***********************************/
 
-    addPlayer(ranking,minutos,segundos,user); //tá funcionando
+    addPlayer(ranking,minutos,segundos,user); 
 
     /*********************LEITURA DO ARQUIVO PARA STRUCT LOCAL E ORDENAÇÃO**************************/
 
     clean();
     sleep(3);
     
-    quantPlayers = orderRanking(minutos,segundos,users); //TA FUNCIONANDO AAAAAAAAAAA
+    quantPlayers = orderRanking(minutos,segundos,users); 
 
     /****************************************ATUALIZAR ARQUIVO**************************************/
 
