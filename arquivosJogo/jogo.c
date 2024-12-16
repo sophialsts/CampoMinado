@@ -56,11 +56,14 @@ void menu(){
     printf("                                                                                ✩✩✩✩✩✩✩✩✩✩✩\n");
     printf("                                                                                 ✩✩✩✩✩✩✩✩✩\n");
     printf("                                                                                  ✩✩✩✩✩✩✩\n\n" RESET);
-    printf("                                                                         ");
-    printf(MAGENTA fundoBranco "Clique enter para começar!" RESET);
+    printf("                                                                      ");
+    printf(MAGENTA fundoBranco "Clique qualquer tecla para começar!" RESET);
 
+    do{
     scanf("%c", &start);
-    if(start == '\n') return;
+    } while(start != '\n');
+    
+    return;
 
 }
 
