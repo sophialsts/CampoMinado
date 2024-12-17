@@ -4,10 +4,14 @@
 
      2         1850         00:57          2         Sophia  Lima
 
-     3         1650         00:32          1         S L
+     3         1650         00:20          1         S L
 
-     4         1650         00:40          1         Sophia Lima
+     4         1650         00:22          1         Sophia Lima
 
-     5         1650         00:52          2         Sophia Lima
+     5         1650         00:32          2         Sophia Lima
 
-     6         900         00:25          2         Sophia Lima
+     6         1650         00:40          1         s a
+
+     7         1650         00:52          1         s a
+
+     8         900         00:25          2         Sophia Lima

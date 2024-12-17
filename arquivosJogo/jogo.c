@@ -286,38 +286,35 @@ void game(Infos *user){
 
         do{
             do{
-                printf(MAGENTA ITALICO "\n\n                                                                      Digite a linha que deseja:" );
+                printf(MAGENTA "\n\n                                                                      Digite a linha que deseja:" );
                 scanf("%d", &linha);
-                if(linha < 0 || linha >= tamCampo) {
-                    printf("\n                                                                        ");
-                    printf(fundoBranco NEGRITO "Digite uma linha válida!" RESET);
-                    printf("\n");
-                    sleep(1);
-                    clean();
-                    printf("\n\n\n\n\n\n");
-                    prtMatriz();
+                if(linha < 0 || linha > tamCampo) {
+                printf("\n                                                                        ");
+                printf(fundoBranco VERMELHO "Digite uma linha válida!" RESET);
+                printf("\n");
+                sleep(1);
+                clean();
+                prtMatriz();
                 }
             }
-            while(linha < 0 || linha >= tamCampo);
+            while(linha < 0 || linha > tamCampo);
 
-            printf("\n");
             printf("                                                                      Digite a coluna que deseja:" RESET);
             scanf("%d", &coluna);
             if(!verificaCoordenadas(linha,coluna)) {
-                printf("\n                                                                        ");
-                printf(fundoBranco NEGRITO "Digite uma coluna válida!" RESET);
+                printf("                                                                        ");
+                printf(VERMELHO fundoBranco "Digite uma coluna válida!" RESET);
                 printf("\n");
                 sleep(1);
                 clean();
-                printf("\n\n\n\n\n");
                 prtMatriz();
                 }
             else if(revelados[linha][coluna] != naoRevelado){
-                printf("\n                                                                        ");
-                printf(VERMELHO fundoBranco "Essa célula já foi selecionada!" RESET);
-                printf("\n");
+                printf("                                                                        ");
+                printf(VERMELHO fundoBranco "Essa célula já foi selecionada." RESET);
                 sleep(1);
                 clean();
+                printf("\n\n\n");
                 prtMatriz();
             }
         }
@@ -325,7 +322,7 @@ void game(Infos *user){
 
         printf("\n");
         printf("                                                                      ");
-        printf(ITALICO "Você selecionou a coordenada:" RESET);
+        printf("Você selecionou a coordenada:" RESET);
         printf("\n");
         printf("                                                                         ");
         printf(fundoMagenta "Linha: %d | Coluna: %d" RESET, linha,coluna);
@@ -338,7 +335,7 @@ void game(Infos *user){
                 revelados[linha][coluna] = M[linha][coluna];
                 printf("\n\n\n\n");
                 prtMatriz();
-                printf(MAGENTA ITALICO"\n\n                                                                Você selecionou um local com bomba :c\n" RESET);
+                printf(MAGENTA "\n\n                                                                Você selecionou um local com bomba :c\n" RESET);
                 sleep(7);
                 clean();
                 printf("\n\n\n\n\n\n\n\n\n\n\n\n\n");
@@ -412,30 +409,19 @@ void player(Infos *user){
     char nomeCompleto[50];
     int nível;
 
-    printf("\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    printf("\n\n\n\n\n\n\n\n\n");
 
-    printf(MAGENTA ITALICO "                                                                         Digite seu 1º nome: " RESET);
+    printf(MAGENTA "                                                                         Digite seu 1º nome: " RESET);
     fgets(nome,sizeof(nome),stdin);
     nome[strlen(nome)-1] = '\0';
-    printf(MAGENTA ITALICO"\n                                                                         Digite seu sobrenome: " RESET);
+    printf(MAGENTA "\n                                                                         Digite seu sobrenome: " RESET);
     fgets(sobrenome,sizeof(sobrenome),stdin);
 
     snprintf(user->nome, sizeof(nomeCompleto), "%s %s", nome, sobrenome);
 
     do {
-    printf(MAGENTA ITALICO "\n                                                           Selecione um nível de jogo entre esses / 1 / 2 / 3 /: " RESET);
+    printf(MAGENTA "\n                                                            Selecione um nível de jogo entre esses / 1 / 2 / 3 /: " RESET);
     scanf("%d", &user->dificuldade);
-        if(user->dificuldade > 3 || user->dificuldade < 1){
-            printf("\n");
-            printf("                                                                   ");
-            printf(fundoMagenta NEGRITO " Digite um nível de dificuldade válido! " RESET);
-            printf("\n\n");
-            sleep(2);
-            clean();
-            printf("\n");
-            getchar();
-            player(user);
-        }
     } while (user->dificuldade > 3 || user->dificuldade < 1);
 
 } 
@@ -581,6 +567,7 @@ int rewritingRanking(int *ranking,int *minutos, int *segundos, Infos *users[], i
     }
 
     fprintf(file2 ,"| Ranking |  Pontuação |    Tempo   |  Dificuldade | Nome Completo" ); //cabeçalho
+    printf("| Ranking |  Pontuação |    Tempo   |  Dificuldade | Nome Completo" ); //cabeçalho
 
     while (i < cont) {
 
