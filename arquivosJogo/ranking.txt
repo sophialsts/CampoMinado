@@ -1,17 +1,11 @@
 | Ranking |  Pontuação |    Tempo   |  Dificuldade | Nome Completo
 
-     1         2000         02:21          2         Sophia Santos
+     1         2200         01:19          2         Sophia Lima
 
-     2         1850         00:57          2         Sophia  Lima
+     2         1650         00:43          1         Sophia Lima
 
-     3         1650         00:20          1         S L
+     3         0         00:15          2         Sophia Lima
 
-     4         1650         00:22          1         Sophia Lima
+     4         0         00:17          1         Sophia Lima
 
-     5         1650         00:32          2         Sophia Lima
-
-     6         1650         00:40          1         s a
-
-     7         1650         00:52          1         s a
-
-     8         900         00:25          2         Sophia Lima
+     5         0         00:18          3         Sophia Lima

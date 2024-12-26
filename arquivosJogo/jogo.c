@@ -279,7 +279,7 @@ void game(Infos *user){
     preencheCampo();
     clean();
 
-    while(lose == 1 && win(bombDefinidas) == 0){
+    while(lose == 1 || win(bombDefinidas) == 0){
 
         printf("\n\n\n\n\n\n");
         prtMatriz();
@@ -302,19 +302,23 @@ void game(Infos *user){
             printf("                                                                      Digite a coluna que deseja:" RESET);
             scanf("%d", &coluna);
             if(!verificaCoordenadas(linha,coluna)) {
-                printf("                                                                        ");
-                printf(VERMELHO fundoBranco "Digite uma coluna válida!" RESET);
+                printf("\n");
+                printf("                                                                       ");
+                printf(VERMELHO fundoBranco "Digite uma coluna válida!\n" RESET);
                 printf("\n");
                 sleep(1);
                 clean();
+                printf("\n\n\n\n\n\n");
                 prtMatriz();
                 }
             else if(revelados[linha][coluna] != naoRevelado){
-                printf("                                                                        ");
+                printf("\n");
+                printf("                                                                     ");
                 printf(VERMELHO fundoBranco "Essa célula já foi selecionada." RESET);
+                printf("\n");
                 sleep(1);
                 clean();
-                printf("\n\n\n");
+                printf("\n\n\n\n\n\n");
                 prtMatriz();
             }
         }
@@ -353,9 +357,8 @@ void game(Infos *user){
                 printf("                                                                     ");
                 printf(PRETO "⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤⪤\n" RESET);
                 sleep(3);
-                lose = 0;
                 clean();
-                break; 
+                return;
             case Vazio:
                 revela(linha,coluna,user);
                 break;
@@ -422,6 +425,15 @@ void player(Infos *user){
     do {
     printf(MAGENTA "\n                                                            Selecione um nível de jogo entre esses / 1 / 2 / 3 /: " RESET);
     scanf("%d", &user->dificuldade);
+        if(user->dificuldade > 3 || user->dificuldade < 1){
+            printf("\n                                                                     ");
+            printf(fundoBranco VERMELHO "Digite uma dificuldade válida!" RESET);
+            printf("\n");
+            sleep(1);
+            printf("\r");  
+            printf("                  ");  
+            printf("\r");
+        }
     } while (user->dificuldade > 3 || user->dificuldade < 1);
 
 } 
@@ -437,14 +449,14 @@ void points(Infos *user, int *minutes){
         case 1:
             break;
         case 2:
-            user->pontuação +=400;
+            user->pontuação +=600;
             break;
         case 3:
-            user->pontuação += 550;
+            user->pontuação += 900;
             break;
     }
 
-    if(user->dificuldade > 2){ //bônus de tempo só vai pra dificuldade 3
+    if((user->dificuldade > 2) && !lose){ //bônus de tempo só vai pra dificuldade 3
         for(int i = 0; i < 6 ; i++){
             if(*minutes < intervalos[i]) {
                 user->pontuação += pontuações[i]; 
@@ -452,6 +464,8 @@ void points(Infos *user, int *minutes){
             }
         }
     }
+
+    if(lose) user->pontuação = 0;
 
 }
 
